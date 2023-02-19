@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { faBattery, faBolt, faPlug } from '@fortawesome/free-solid-svg-icons'
 import { Page } from 'src/blocks'
 import styled from 'styled-components'
 
@@ -14,11 +15,10 @@ const StyledDashboard = styled(Page)`
     height: 100%;
 
     &.left {
-      width: 80%;
+      flex: 1;
     }
 
     &.right {
-      width: 20%;
     }
   }
 `
@@ -32,9 +32,24 @@ export const Dashboard = () => {
       <section className="right">
         <Measurements
           data={[
-            { label: 'Corrente', value: '1.2', unit: 'A', color: 'red' },
-            { label: 'Tensão', value: '12', unit: 'V', color: 'blue' },
-            { label: 'Potência', value: '144', unit: 'W', color: 'purple' },
+            {
+              label: 'Tensão',
+              value: '12',
+              unit: 'V',
+              icon: faBolt,
+            },
+            {
+              label: 'Corrente',
+              value: '1.2',
+              unit: 'A',
+              icon: faBattery,
+            },
+            {
+              label: 'Potência',
+              value: '144',
+              unit: 'W',
+              icon: faPlug,
+            },
           ]}
         />
       </section>
