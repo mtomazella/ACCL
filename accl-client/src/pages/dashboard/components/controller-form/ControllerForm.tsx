@@ -14,44 +14,11 @@ import {
   TableRow,
   TextField,
 } from '@mui/material'
-import { isEqual } from 'lodash'
-import styled from 'styled-components'
+import { cloneDeep, isEqual } from 'lodash'
 
-const StyledControllerForm = styled.section`
-  width: 100%;
-  height: 100%;
-  padding: 1rem;
+import { Chart } from '../chart'
 
-  > section.plot {
-    height: 50%;
-    width: 100%;
-    border: 1px #e0e0e0 solid;
-    border-radius: 4px 4px 0 0;
-    box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%),
-      0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-  }
-
-  > section.form {
-    > div.MuiTableContainer-root {
-      border-top: none;
-      border-radius: 0 0 4px 4px;
-
-      table {
-        th {
-          font-weight: 900;
-        }
-
-        td.align-top {
-          vertical-align: top;
-        }
-
-        div.MuiTextField-root {
-          width: 100%;
-        }
-      }
-    }
-  }
-`
+import { StyledControllerForm } from './ControllerForm.styled'
 
 type Form = {
   newTime: number | undefined
@@ -71,7 +38,14 @@ export const ControllerForm: React.FC = () => {
     register,
     setError,
     clearErrors,
-  } = useForm<Form>()
+  } = useForm<Form>({
+    defaultValues: {
+      controlPoints: [
+        { time: 0, current: 0 },
+        { time: Infinity, current: 0 },
+      ],
+    },
+  })
   const {
     fields: controlPoints,
     append: appendControlPoint,
@@ -85,13 +59,14 @@ export const ControllerForm: React.FC = () => {
 
   useEffect(() => {
     const points = getValues('controlPoints')
-    const newPoints = [...points].sort((p1, p2) => p1.time - p2.time)
+    const newPoints = cloneDeep(points).sort((p1, p2) => p1.time - p2.time)
 
-    if (!isEqual(points, newPoints))
-      setValue(
-        'controlPoints',
-        getValues('controlPoints').sort((p1, p2) => p1.time - p2.time),
-      )
+    console.log(newPoints.at(-1).current, newPoints.at(-2).current)
+    if (newPoints.at(-1).time !== Infinity)
+      newPoints.push({ time: Infinity, current: 0 })
+    newPoints.at(-1).current = newPoints.at(-2).current
+
+    if (!isEqual(points, newPoints)) setValue('controlPoints', newPoints)
   }, [controlPointsWatcher])
 
   const addNewControlPoint = () => {
@@ -125,7 +100,7 @@ export const ControllerForm: React.FC = () => {
     }
 
     const indexOfExitingPoint = getValues('controlPoints').findIndex(
-      point => point.time === time,
+      point => point.time.toString() === time.toString(),
     )
 
     if (indexOfExitingPoint !== -1)
@@ -137,14 +112,15 @@ export const ControllerForm: React.FC = () => {
     setFocus('newTime')
   }
 
-  const handleFieldKeyDown = ({ key, ...event }) => {
-    console.log(event)
+  const handleFieldKeyDown = ({ key }) => {
     if (key === 'Enter') addNewControlPoint()
   }
 
   return (
     <StyledControllerForm>
-      <section className="plot"></section>
+      <section className="plot">
+        <Chart data={controlPoints} />
+      </section>
       <section className="form">
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="Points">
@@ -182,17 +158,16 @@ export const ControllerForm: React.FC = () => {
                 </TableCell>
               </TableRow>
 
-              {controlPoints.map(({ time, current }, index) => (
+              {controlPoints.slice(0, -1).map(({ time, current }, index) => (
                 <TableRow key={time}>
                   <TableCell>{time}</TableCell>
                   <TableCell>{current}</TableCell>
                   <TableCell align="right">
-                    <IconButton>
-                      <FontAwesomeIcon
-                        icon={faRemove}
-                        onClick={() => removeControlPoint(index)}
-                      />
-                    </IconButton>
+                    {time === 0 ? null : (
+                      <IconButton onClick={() => removeControlPoint(index)}>
+                        <FontAwesomeIcon icon={faRemove} />
+                      </IconButton>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
