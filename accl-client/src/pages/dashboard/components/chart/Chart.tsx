@@ -27,7 +27,12 @@ export const Chart: React.FC<{
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis name="Tempo" dataKey="time" label={{ value: 'Tempo (s)' }} />
+        <XAxis
+          name="Tempo"
+          dataKey="time"
+          label={{ value: 'Tempo (s)' }}
+          tickFormatter={value => (value === Infinity ? '∞' : value)}
+        />
         <YAxis label={{ value: 'Corrente (A)', angle: '-90' }} />
         <Tooltip
           formatter={value => [`${value} A`, 'Corrente']}

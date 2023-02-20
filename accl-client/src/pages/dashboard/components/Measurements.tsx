@@ -1,8 +1,13 @@
 import React from 'react'
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
+import {
+  faArrowRight,
+  faBoxArchive,
+  faSave,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Card } from '@mui/material'
+import { Card, IconButton, Tooltip } from '@mui/material'
 import styled from 'styled-components'
 
 const StyledMeasurements = styled.div`
@@ -12,6 +17,32 @@ const StyledMeasurements = styled.div`
   grid-row-gap: 2rem;
   padding: 1rem 1rem 1rem 0;
   width: 100%;
+`
+
+const StyledPanel = styled(Card)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  font-family: monospace;
+  color: gray;
+  border: 1px solid #e0e0e0;
+  font-size: 1.5rem;
+  padding: 1rem;
+
+  > .MuiIconButton-root {
+    color: white;
+
+    &:nth-of-type(1) {
+      background-color: #82d582;
+    }
+    &:nth-of-type(2) {
+      background-color: #6363c2;
+    }
+    &:nth-of-type(3) {
+      background-color: #bb5dbb;
+    }
+  }
 `
 
 const StyledMeasurementPanel = styled(Card)`
@@ -66,6 +97,26 @@ export const Measurements: React.FC<{
   data: MeasurementObject[]
 }> = ({ data }) => (
   <StyledMeasurements>
+    <StyledPanel>
+      <Tooltip title="Enviar para a carga">
+        <IconButton>
+          <FontAwesomeIcon icon={faArrowRight} />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Salvar configurações">
+        <IconButton>
+          <FontAwesomeIcon icon={faSave} />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Ver configurações salvas">
+        <IconButton>
+          <FontAwesomeIcon icon={faBoxArchive} />
+        </IconButton>
+      </Tooltip>
+    </StyledPanel>
+
     {data.map(measurement => (
       <MeasurementPanel {...measurement} key={measurement.label} />
     ))}
