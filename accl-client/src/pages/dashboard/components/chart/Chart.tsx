@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import {
   CartesianGrid,
@@ -13,6 +13,11 @@ import {
 export const Chart: React.FC<{
   data: { time: number; current: number }[]
 }> = ({ data }) => {
+  const maxCurrent = useMemo(
+    () => data.reduce((max, e) => (e.current > max ? e.current : max), 0),
+    [data],
+  )
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
@@ -33,7 +38,10 @@ export const Chart: React.FC<{
           label={{ value: 'Tempo (s)' }}
           tickFormatter={value => (value === Infinity ? '∞' : value)}
         />
-        <YAxis label={{ value: 'Corrente (A)', angle: '-90' }} />
+        <YAxis
+          label={{ value: 'Corrente (A)', angle: '-90' }}
+          domain={[0, maxCurrent]}
+        />
         <Tooltip
           formatter={value => [`${value} A`, 'Corrente']}
           labelFormatter={time =>

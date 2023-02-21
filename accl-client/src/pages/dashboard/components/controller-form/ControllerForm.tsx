@@ -21,8 +21,8 @@ import { Chart } from '../chart'
 import { StyledControllerForm } from './ControllerForm.styled'
 
 type Form = {
-  newTime: number | undefined
-  newCurrent: number | undefined
+  newTime: string | undefined
+  newCurrent: string | undefined
   controlPoints: { time: number; current: number }[]
 }
 
@@ -104,8 +104,11 @@ export const ControllerForm: React.FC = () => {
     )
 
     if (indexOfExitingPoint !== -1)
-      updateControlPoint(indexOfExitingPoint, { time, current })
-    else appendControlPoint({ time, current })
+      updateControlPoint(indexOfExitingPoint, {
+        time: +time,
+        current: +current,
+      })
+    else appendControlPoint({ time: +time, current: +current })
 
     resetField('newTime')
     resetField('newCurrent')
