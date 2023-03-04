@@ -1,6 +1,12 @@
 import React from 'react'
 
-import { faBattery, faBolt, faPlug } from '@fortawesome/free-solid-svg-icons'
+import {
+  faBattery,
+  faBolt,
+  faFan,
+  faPlug,
+  faTemperature3,
+} from '@fortawesome/free-solid-svg-icons'
 import { Page } from 'src/blocks'
 import styled from 'styled-components'
 
@@ -49,6 +55,18 @@ export const Dashboard = () => {
               value: '144',
               unit: 'W',
               icon: faPlug,
+            },
+            {
+              label: 'Temperatura',
+              value: '52',
+              unit: 'ºC',
+              icon: faTemperature3,
+            },
+            {
+              label: 'Ventilador',
+              value: '84',
+              unit: '%',
+              icon: faFan,
             },
           ]}
         />

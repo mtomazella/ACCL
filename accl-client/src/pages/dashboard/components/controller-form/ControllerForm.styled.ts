@@ -31,6 +31,13 @@ export const StyledControllerForm = styled.section`
         div.MuiTextField-root {
           width: 100%;
         }
+
+        button {
+          background-color: gray;
+          color: white;
+          aspect-ratio: 1;
+          padding: 0.5rem;
+        }
       }
     }
   }

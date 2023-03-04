@@ -46,13 +46,13 @@ export const Chart: React.FC<{
           formatter={value => [`${value} A`, 'Corrente']}
           labelFormatter={time =>
             time === Infinity
-              ? `A corrente se manterá nesse valor\n indefinidamente após ${
+              ? `A corrente se manterá nesse valor indefinidamente após ${
                   data.at(-2).time
                 } segundos.`
               : `Tempo: ${time}s`
           }
         />
-        <Line type="stepAfter" dataKey="current" stroke="#8884d8" />
+        <Line type="linear" dataKey="current" stroke="#8884d8" />
       </LineChart>
     </ResponsiveContainer>
   )
