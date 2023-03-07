@@ -10,7 +10,7 @@ fn main() {
         println!("{}", p.port_name);
     }
 
-    let mut port = serialport::new("/dev/ttyUSB0", 115_200)
+    let mut port = serialport::new("/dev/ttyUSB0", 9600)
         .timeout(Duration::from_millis(10))
         .open()
         .expect("Failed to open port");
