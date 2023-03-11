@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { listen } from '@tauri-apps/api/event'
+import { Event, listen } from '@tauri-apps/api/event'
 
 export type MetricsField =
   | 'temperature'
@@ -79,7 +79,9 @@ export const useMetrics = () => {
   // }
 
   useEffect(() => {
-    listen('new_metrics', console.log)
+    listen('new_metrics', (event: Event<RawMetrics>) =>
+      setCurrentMetrics(formatRawMetrics(event.payload)),
+    )
   }, [])
 
   return {

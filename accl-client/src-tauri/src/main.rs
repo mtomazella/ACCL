@@ -5,11 +5,11 @@
 
 mod communication;
 
-use communication::{get_current_metrics, serial_listener_process};
+use communication::serial_listener_process;
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_current_metrics])
+        .invoke_handler(tauri::generate_handler![])
         .setup(|app| {
             let app_handle = app.handle();
 
