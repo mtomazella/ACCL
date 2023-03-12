@@ -13,12 +13,13 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
 } from '@mui/material'
 import { cloneDeep, isEqual } from 'lodash'
 
 import { Chart } from '../chart'
 
-import { StyledControllerForm } from './ControllerForm.styled'
+import { StyledControllerForm, TooltipContent } from './ControllerForm.styled'
 
 type Form = {
   newTime: string | undefined
@@ -137,27 +138,70 @@ export const ControllerForm: React.FC = () => {
             <TableBody>
               <TableRow key="addRow">
                 <TableCell className="align-top">
-                  <TextField
-                    type="number"
-                    onKeyDown={handleFieldKeyDown}
-                    error={!!formErrors?.newTime}
-                    helperText={formErrors?.newTime?.message}
-                    {...register('newTime')}
-                  />
+                  <Tooltip
+                    title={
+                      <>
+                        <h3>
+                          <b>Insira o tempo em segundos.</b>
+                        </h3>
+                        <h4>
+                          É possível editar um ponto inserindo outro com o mesmo
+                          valor de tempo.
+                        </h4>
+                      </>
+                    }
+                    enterDelay={1000}
+                    placement="top"
+                    arrow
+                  >
+                    <TextField
+                      type="number"
+                      onKeyDown={handleFieldKeyDown}
+                      error={!!formErrors?.newTime}
+                      helperText={formErrors?.newTime?.message}
+                      {...register('newTime')}
+                    />
+                  </Tooltip>
                 </TableCell>
                 <TableCell className="align-top">
-                  <TextField
-                    type="number"
-                    onKeyDown={handleFieldKeyDown}
-                    error={!!formErrors?.newCurrent}
-                    helperText={formErrors?.newCurrent?.message}
-                    {...register('newCurrent')}
-                  />
+                  <Tooltip
+                    title={
+                      <>
+                        <h3>
+                          <b>Insira a corrente esperada em amperes.</b>
+                        </h3>
+                      </>
+                    }
+                    enterDelay={1000}
+                    placement="top"
+                    arrow
+                  >
+                    <TextField
+                      type="number"
+                      onKeyDown={handleFieldKeyDown}
+                      error={!!formErrors?.newCurrent}
+                      helperText={formErrors?.newCurrent?.message}
+                      {...register('newCurrent')}
+                    />
+                  </Tooltip>
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton onClick={addNewControlPoint}>
-                    <FontAwesomeIcon icon={faAdd} />
-                  </IconButton>
+                  <Tooltip
+                    title={
+                      <>
+                        <h3>
+                          <b>Adicionar ponto à rotina</b>
+                        </h3>
+                      </>
+                    }
+                    enterDelay={1000}
+                    placement="top"
+                    arrow
+                  >
+                    <IconButton onClick={addNewControlPoint}>
+                      <FontAwesomeIcon icon={faAdd} />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
 

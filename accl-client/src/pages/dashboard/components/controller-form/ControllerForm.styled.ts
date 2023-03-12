@@ -1,3 +1,5 @@
+import React from 'react'
+
 import styled from 'styled-components'
 
 export const StyledControllerForm = styled.section`
@@ -40,5 +42,12 @@ export const StyledControllerForm = styled.section`
         }
       }
     }
+  }
+`
+
+export const TooltipContent = styled(React.Fragment)`
+  span {
+    font-size: 1rem;
+    font-weight: bold;
   }
 `
