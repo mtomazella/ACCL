@@ -4,71 +4,17 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import {
   faArrowRight,
   faBoxArchive,
+  faGear,
   faSave,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Card, IconButton, Tooltip } from '@mui/material'
-import styled from 'styled-components'
+import { IconButton, Tooltip } from '@mui/material'
 
-const StyledMeasurements = styled.div`
-  display: grid;
-  grid-column: 1f;
-  grid-row: 1fr 1fr 1fr;
-  grid-row-gap: 2rem;
-  padding: 1rem 1rem 1rem 0;
-  width: 100%;
-`
-
-const StyledPanel = styled(Card)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  font-family: monospace;
-  color: gray;
-  border: 1px solid #e0e0e0;
-  font-size: 1.5rem;
-  padding: 1rem;
-
-  > .MuiIconButton-root {
-    color: white;
-
-    &:nth-of-type(1) {
-      background-color: #82d582;
-    }
-    &:nth-of-type(2) {
-      background-color: #6363c2;
-    }
-    &:nth-of-type(3) {
-      background-color: #bb5dbb;
-    }
-  }
-`
-
-const StyledMeasurementPanel = styled(Card)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: monospace;
-  color: gray;
-  border: 1px solid #e0e0e0;
-  aspect-ratio: 1;
-  font-size: 1.5rem;
-  padding: 3rem;
-
-  > h3 {
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    padding-top: 0.5rem;
-  }
-
-  > div {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-  }
-`
+import {
+  StyledMeasurementPanel,
+  StyledMeasurements,
+  StyledPanel,
+} from './Measurements.styled'
 
 export type MeasurementObject = {
   label: string
@@ -113,6 +59,12 @@ export const Measurements: React.FC<{
       <Tooltip title="Ver configurações salvas">
         <IconButton>
           <FontAwesomeIcon icon={faBoxArchive} />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Configurações da aplicação">
+        <IconButton>
+          <FontAwesomeIcon icon={faGear} />
         </IconButton>
       </Tooltip>
     </StyledPanel>
