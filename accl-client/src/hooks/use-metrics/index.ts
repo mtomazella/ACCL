@@ -72,12 +72,6 @@ export const useMetrics = () => {
     formatRawMetrics(undefined),
   )
 
-  // const requestRefresh = () => {
-  //   invoke('get_current_metrics').then((data: RawMetrics) =>
-  //     setCurrentMetrics(formatRawMetrics(data)),
-  //   )
-  // }
-
   useEffect(() => {
     listen('new_metrics', (event: Event<RawMetrics>) =>
       setCurrentMetrics(formatRawMetrics(event.payload)),

@@ -1,7 +1,7 @@
 import { Card } from '@mui/material'
 import styled from 'styled-components'
 
-export const StyledMeasurements = styled.div`
+export const StyledSideBar = styled.div`
   display: grid;
   grid-column: 1f;
   grid-row-gap: 1rem;

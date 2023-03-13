@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 
 import { faAdd, faRemove } from '@fortawesome/free-solid-svg-icons'
@@ -16,10 +16,11 @@ import {
   Tooltip,
 } from '@mui/material'
 import { cloneDeep, isEqual } from 'lodash'
+import { Routine } from 'src/hooks'
 
 import { Chart } from '../chart'
 
-import { StyledControllerForm, TooltipContent } from './ControllerForm.styled'
+import { StyledControllerForm } from './ControllerForm.styled'
 
 type Form = {
   newTime: string | undefined
@@ -27,7 +28,10 @@ type Form = {
   controlPoints: { time: number; current: number }[]
 }
 
-export const ControllerForm: React.FC = () => {
+export const ControllerForm: React.FC<{
+  exportData: (routine: Routine) => void
+  data: Routine
+}> = ({ data, exportData }) => {
   const {
     control,
     formState: { errors: formErrors },
@@ -62,12 +66,19 @@ export const ControllerForm: React.FC = () => {
     const points = getValues('controlPoints')
     const newPoints = cloneDeep(points).sort((p1, p2) => p1.time - p2.time)
 
-    console.log(newPoints.at(-1).current, newPoints.at(-2).current)
-    if (newPoints.at(-1).time !== Infinity)
-      newPoints.push({ time: Infinity, current: 0 })
-    newPoints.at(-1).current = newPoints.at(-2).current
-
     if (!isEqual(points, newPoints)) setValue('controlPoints', newPoints)
+  }, [controlPointsWatcher])
+
+  useEffect(() => {
+    const newRoutine: Routine = {
+      name: undefined,
+      curveType: 'linear',
+      loop: false,
+      points: controlPoints,
+    }
+    if (!isEqual(data, newRoutine)) {
+      exportData(newRoutine)
+    }
   }, [controlPointsWatcher])
 
   const addNewControlPoint = () => {
@@ -120,14 +131,26 @@ export const ControllerForm: React.FC = () => {
     if (key === 'Enter') addNewControlPoint()
   }
 
+  const graphPoints = useMemo(() => {
+    const points = cloneDeep(controlPoints) as {
+      time: number
+      current: number
+    }[]
+    points.push({
+      time: Infinity,
+      current: controlPoints.at(-1).current ?? 0,
+    })
+    return points
+  }, [controlPoints])
+
   return (
     <StyledControllerForm>
       <section className="plot">
-        <Chart data={controlPoints} />
+        <Chart data={graphPoints ?? []} />
       </section>
       <section className="form">
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="Points">
+          <Table aria-label="Points">
             <TableHead>
               <TableRow>
                 <TableCell>Tempo (s)</TableCell>
@@ -135,6 +158,7 @@ export const ControllerForm: React.FC = () => {
                 <TableCell />
               </TableRow>
             </TableHead>
+
             <TableBody>
               <TableRow key="addRow">
                 <TableCell className="align-top">
@@ -194,11 +218,10 @@ export const ControllerForm: React.FC = () => {
                         </h3>
                       </>
                     }
-                    enterDelay={1000}
                     placement="top"
                     arrow
                   >
-                    <IconButton onClick={addNewControlPoint}>
+                    <IconButton className="add" onClick={addNewControlPoint}>
                       <FontAwesomeIcon icon={faAdd} />
                     </IconButton>
                   </Tooltip>
@@ -211,9 +234,21 @@ export const ControllerForm: React.FC = () => {
                   <TableCell>{current}</TableCell>
                   <TableCell align="right">
                     {time === 0 ? null : (
-                      <IconButton onClick={() => removeControlPoint(index)}>
-                        <FontAwesomeIcon icon={faRemove} />
-                      </IconButton>
+                      <Tooltip
+                        title={
+                          <>
+                            <h3>
+                              <b>Remover ponto da rotina</b>
+                            </h3>
+                          </>
+                        }
+                        placement="top"
+                        arrow
+                      >
+                        <IconButton onClick={() => removeControlPoint(index)}>
+                          <FontAwesomeIcon icon={faRemove} />
+                        </IconButton>
+                      </Tooltip>
                     )}
                   </TableCell>
                 </TableRow>

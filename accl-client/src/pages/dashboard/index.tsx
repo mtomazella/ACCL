@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 
 import { Page } from 'src/blocks'
-import { useMetrics } from 'src/hooks'
+import { Routine, useMetrics, useRoutines } from 'src/hooks'
 import styled from 'styled-components'
 
 import { ControllerForm } from './components/controller-form'
-import { Measurements } from './components/measurements/Measurements'
+import { SideBar } from './components/side-bar/SideBar'
 import { formatMeasurements } from './functions'
 
 const StyledDashboard = styled(Page)`
@@ -23,32 +23,35 @@ const StyledDashboard = styled(Page)`
     &.right {
       width: fit-content;
       min-width: 10rem;
-
-      > div {
-        height: 96vh;
-        overflow-y: auto;
-      }
     }
   }
 `
 
 export const Dashboard = () => {
   const { currentMetrics } = useMetrics()
+  const { upload } = useRoutines()
+
+  const [routine, setRoutine] = useState<Routine | undefined>(undefined)
 
   const measurementsData = useMemo(
     () => formatMeasurements(currentMetrics),
     [currentMetrics],
   )
 
+  const onUpload = useCallback(() => {
+    upload(routine)
+  }, [routine, upload])
+
   return (
     <StyledDashboard>
       <section className="left">
-        <ControllerForm />
+        <ControllerForm data={routine} exportData={setRoutine} />
       </section>
       <section className="right">
-        <div>
-          <Measurements data={measurementsData} />
-        </div>
+        <SideBar
+          metrics={measurementsData}
+          buttonHandlers={{ upload: { onClick: onUpload } }}
+        />
       </section>
     </StyledDashboard>
   )

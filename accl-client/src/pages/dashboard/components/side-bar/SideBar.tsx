@@ -12,9 +12,9 @@ import { IconButton, Tooltip } from '@mui/material'
 
 import {
   StyledMeasurementPanel,
-  StyledMeasurements,
   StyledPanel,
-} from './Measurements.styled'
+  StyledSideBar,
+} from './SideBar.styled'
 
 export type MeasurementObject = {
   label: string
@@ -22,6 +22,8 @@ export type MeasurementObject = {
   unit: string
   icon: IconProp
 }
+
+type ButtonKey = 'upload' | 'save' | 'archive' | 'config'
 
 const MeasurementPanel: React.FC<MeasurementObject> = ({
   label,
@@ -39,38 +41,46 @@ const MeasurementPanel: React.FC<MeasurementObject> = ({
   </StyledMeasurementPanel>
 )
 
-export const Measurements: React.FC<{
-  data: MeasurementObject[]
-}> = ({ data }) => (
-  <StyledMeasurements>
+export const SideBar: React.FC<{
+  metrics: MeasurementObject[]
+  buttonHandlers: Partial<
+    Record<
+      ButtonKey,
+      {
+        onClick?: () => void
+      }
+    >
+  >
+}> = ({ metrics, buttonHandlers }) => (
+  <StyledSideBar>
     <StyledPanel>
       <Tooltip title="Enviar para a carga">
-        <IconButton>
+        <IconButton onClick={buttonHandlers.upload?.onClick}>
           <FontAwesomeIcon icon={faArrowRight} />
         </IconButton>
       </Tooltip>
 
       <Tooltip title="Salvar configurações">
-        <IconButton>
+        <IconButton onClick={buttonHandlers.save?.onClick}>
           <FontAwesomeIcon icon={faSave} />
         </IconButton>
       </Tooltip>
 
       <Tooltip title="Ver configurações salvas">
-        <IconButton>
+        <IconButton onClick={buttonHandlers.archive?.onClick}>
           <FontAwesomeIcon icon={faBoxArchive} />
         </IconButton>
       </Tooltip>
 
       <Tooltip title="Configurações da aplicação">
-        <IconButton>
+        <IconButton onClick={buttonHandlers.config?.onClick}>
           <FontAwesomeIcon icon={faGear} />
         </IconButton>
       </Tooltip>
     </StyledPanel>
 
-    {data.map(measurement => (
+    {metrics.map(measurement => (
       <MeasurementPanel {...measurement} key={measurement.label} />
     ))}
-  </StyledMeasurements>
+  </StyledSideBar>
 )
