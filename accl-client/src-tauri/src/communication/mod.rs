@@ -72,6 +72,33 @@ fn establish_serial_connection(port_code: &str) -> Result<Box<dyn SerialPort>, s
         .open()
 }
 
+fn define_new_str_buffer(old_buffer: String, value: &str) -> String {
+    let buffer_has_beginning = old_buffer.starts_with('{');
+    let mut split_data = value.split_inclusive('}');
+    let data_has_ending = value.contains('}');
+    let data_has_beginning = value.contains('{');
+
+    let mut new_buffer = "".to_owned();
+
+    if buffer_has_beginning {
+        if data_has_ending || !data_has_beginning && !data_has_ending {
+            new_buffer.push_str(&old_buffer);
+            new_buffer.push_str(split_data.nth(0).unwrap());
+        }
+    } else {
+        if data_has_beginning {
+            let beginning = split_data.find(|item| item.contains('{'));
+            match beginning {
+                Some(b) => {
+                    new_buffer.push_str(b);
+                }
+                None => new_buffer = "".to_owned(),
+            }
+        }
+    }
+    return new_buffer;
+}
+
 pub fn serial_listener_process<R: tauri::Runtime>(manager: &impl Manager<R>) {
     let ports = serialport::available_ports().expect("No ports found!");
 
@@ -96,12 +123,7 @@ pub fn serial_listener_process<R: tauri::Runtime>(manager: &impl Manager<R>) {
                 let parsed_result = std::str::from_utf8(&serial_buf[..t]);
                 match parsed_result {
                     Ok(string_data) => {
-                        if string_data.ends_with('}') {
-                            str_buffer.push_str(string_data);
-                        }
-                        if string_data.starts_with('{') {
-                            str_buffer = string_data.to_owned();
-                        }
+                        str_buffer = define_new_str_buffer(str_buffer, string_data);
                         if str_buffer.starts_with('{') && str_buffer.ends_with('}') {
                             handle_new_measurement(manager, &str_buffer);
                             str_buffer = "".to_owned();
