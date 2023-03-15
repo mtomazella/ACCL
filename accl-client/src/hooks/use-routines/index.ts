@@ -1,8 +1,10 @@
 import { invoke } from '@tauri-apps/api'
 
+export type RoutineInterpolation = 'linear' | 'stepAfter' | 'monotone'
+
 export type Routine = {
   name: string | undefined
-  curveType: 'linear'
+  curveType: RoutineInterpolation
   loop: boolean
   points: { time: number; current: number }[]
 }

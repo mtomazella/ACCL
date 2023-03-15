@@ -18,13 +18,13 @@ export const StyledPanel = styled(Card)`
   color: gray;
   border: 1px solid #e0e0e0;
   font-size: 1.5rem;
-  padding: 1rem;
+  padding: 0.8rem;
 
   > .MuiIconButton-root {
     color: white;
     aspect-ratio: 1;
     width: fit-content;
-    padding: 0.7rem;
+    padding: 0.5rem;
     align-self: center;
     justify-self: center;
 
@@ -51,9 +51,8 @@ export const StyledMeasurementPanel = styled(Card)`
   font-family: monospace;
   color: gray;
   border: 1px solid #e0e0e0;
-  aspect-ratio: 1;
   font-size: 1.5rem;
-  padding: 3rem;
+  padding: 1rem 3rem;
 
   > h3 {
     font-size: 1.2rem;

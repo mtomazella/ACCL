@@ -22,6 +22,25 @@ export const StyledControllerForm = styled.section`
       table {
         th {
           font-weight: 900;
+
+          > div.controls {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+
+            > div {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              width: 60%;
+
+              > div {
+                width: calc(50% - 0.5rem);
+              }
+            }
+          }
         }
 
         td.align-top {

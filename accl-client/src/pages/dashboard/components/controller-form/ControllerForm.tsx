@@ -4,8 +4,12 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { faAdd, faRemove } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -16,7 +20,7 @@ import {
   Tooltip,
 } from '@mui/material'
 import { cloneDeep, isEqual } from 'lodash'
-import { Routine } from 'src/hooks'
+import { Routine, RoutineInterpolation } from 'src/hooks'
 
 import { Chart } from '../chart'
 
@@ -26,6 +30,8 @@ type Form = {
   newTime: string | undefined
   newCurrent: string | undefined
   controlPoints: { time: number; current: number }[]
+  curve_type: RoutineInterpolation
+  loop: 'Y' | 'N'
 }
 
 export const ControllerForm: React.FC<{
@@ -45,10 +51,9 @@ export const ControllerForm: React.FC<{
     clearErrors,
   } = useForm<Form>({
     defaultValues: {
-      controlPoints: [
-        { time: 0, current: 0 },
-        { time: Infinity, current: 0 },
-      ],
+      controlPoints: [{ time: 0, current: 0 }],
+      curve_type: 'linear',
+      loop: 'N',
     },
   })
   const {
@@ -61,6 +66,15 @@ export const ControllerForm: React.FC<{
     control,
   })
   const controlPointsWatcher = watch('controlPoints')
+  const curveTypeWatcher = watch('curve_type')
+  const loopWatcher = watch('loop')
+
+  const interpolation: RoutineInterpolation = useMemo(
+    () => getValues('curve_type'),
+    [curveTypeWatcher],
+  )
+
+  const loop = useMemo(() => getValues('loop') === 'Y', [loopWatcher])
 
   useEffect(() => {
     const points = getValues('controlPoints')
@@ -72,14 +86,14 @@ export const ControllerForm: React.FC<{
   useEffect(() => {
     const newRoutine: Routine = {
       name: undefined,
-      curveType: 'linear',
-      loop: false,
+      curveType: interpolation,
+      loop,
       points: controlPoints,
     }
     if (!isEqual(data, newRoutine)) {
       exportData(newRoutine)
     }
-  }, [controlPointsWatcher])
+  }, [controlPointsWatcher, interpolation, loop])
 
   const addNewControlPoint = () => {
     clearErrors()
@@ -131,22 +145,14 @@ export const ControllerForm: React.FC<{
     if (key === 'Enter') addNewControlPoint()
   }
 
-  const graphPoints = useMemo(() => {
-    const points = cloneDeep(controlPoints) as {
-      time: number
-      current: number
-    }[]
-    points.push({
-      time: Infinity,
-      current: controlPoints.at(-1).current ?? 0,
-    })
-    return points
-  }, [controlPoints])
-
   return (
     <StyledControllerForm>
       <section className="plot">
-        <Chart data={graphPoints ?? []} />
+        <Chart
+          data={controlPoints ?? []}
+          interpolation={interpolation}
+          loop={loop}
+        />
       </section>
       <section className="form">
         <TableContainer component={Paper}>
@@ -154,8 +160,37 @@ export const ControllerForm: React.FC<{
             <TableHead>
               <TableRow>
                 <TableCell>Tempo (s)</TableCell>
-                <TableCell>Corrente (A)</TableCell>
-                <TableCell />
+                <TableCell colSpan={2}>
+                  <div className="controls">
+                    <label>Corrente (A)</label>
+                    <div>
+                      <FormControl>
+                        <InputLabel>Interpolação</InputLabel>
+                        <Select
+                          label="Interpolação"
+                          defaultValue="linear"
+                          {...register('curve_type')}
+                        >
+                          <MenuItem value="linear">Linear</MenuItem>
+                          <MenuItem value="stepAfter">Instantâneo</MenuItem>
+                          <MenuItem value="monotone">Curva</MenuItem>
+                        </Select>
+                      </FormControl>
+
+                      <FormControl>
+                        <InputLabel>Repetir</InputLabel>
+                        <Select
+                          label="Repetir"
+                          defaultValue="N"
+                          {...register('loop')}
+                        >
+                          <MenuItem value="Y">Sim</MenuItem>
+                          <MenuItem value="N">Não</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </div>
+                  </div>
+                </TableCell>
               </TableRow>
             </TableHead>
 
@@ -212,11 +247,9 @@ export const ControllerForm: React.FC<{
                 <TableCell align="right">
                   <Tooltip
                     title={
-                      <>
-                        <h3>
-                          <b>Adicionar ponto à rotina</b>
-                        </h3>
-                      </>
+                      <h3>
+                        <b>Adicionar ponto à rotina</b>
+                      </h3>
                     }
                     placement="top"
                     arrow
@@ -228,7 +261,7 @@ export const ControllerForm: React.FC<{
                 </TableCell>
               </TableRow>
 
-              {controlPoints.slice(0, -1).map(({ time, current }, index) => (
+              {controlPoints.map(({ time, current }, index) => (
                 <TableRow key={time}>
                   <TableCell>{time}</TableCell>
                   <TableCell>{current}</TableCell>
@@ -236,11 +269,9 @@ export const ControllerForm: React.FC<{
                     {time === 0 ? null : (
                       <Tooltip
                         title={
-                          <>
-                            <h3>
-                              <b>Remover ponto da rotina</b>
-                            </h3>
-                          </>
+                          <h3>
+                            <b>Remover ponto da rotina</b>
+                          </h3>
                         }
                         placement="top"
                         arrow
