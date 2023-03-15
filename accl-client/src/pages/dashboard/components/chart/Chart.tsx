@@ -44,7 +44,7 @@ export const Chart: React.FC<{
   const labelFormatter = useCallback(
     (time: number) =>
       time === Infinity
-        ? loop
+        ? !loop
           ? `A corrente se manterá nesse valor indefinidamente após ${
               data.at(-2).time
             } segundos.`
