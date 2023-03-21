@@ -65,4 +65,10 @@ export const StyledMeasurementPanel = styled(Card)`
     flex-direction: row;
     align-items: flex-end;
   }
+
+  h1,
+  h3,
+  svg {
+    color: gray;
+  }
 `

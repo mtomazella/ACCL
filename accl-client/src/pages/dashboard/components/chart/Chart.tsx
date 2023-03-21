@@ -46,7 +46,7 @@ export const Chart: React.FC<{
       time === Infinity
         ? !loop
           ? `A corrente se manterá nesse valor indefinidamente após ${
-              data.at(-2).time
+              data.at(-2)?.time ?? 0
             } segundos.`
           : `A corrente retorna para o valor definido em 0`
         : `Tempo: ${time}s`,

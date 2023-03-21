@@ -29,7 +29,7 @@ const StyledDashboard = styled(Page)`
 
 export const Dashboard = () => {
   const { currentMetrics } = useMetrics()
-  const { upload } = useRoutines()
+  const { upload, save } = useRoutines()
 
   const [routine, setRoutine] = useState<Routine | undefined>(undefined)
 
@@ -42,6 +42,10 @@ export const Dashboard = () => {
     upload(routine)
   }, [routine, upload])
 
+  const onSave = useCallback(() => {
+    save(routine)
+  }, [routine, save])
+
   return (
     <StyledDashboard>
       <section className="left">
@@ -50,7 +54,10 @@ export const Dashboard = () => {
       <section className="right">
         <SideBar
           metrics={measurementsData}
-          buttonHandlers={{ upload: { onClick: onUpload } }}
+          buttonHandlers={{
+            upload: { onClick: onUpload },
+            save: { onClick: onSave },
+          }}
         />
       </section>
     </StyledDashboard>

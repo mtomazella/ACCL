@@ -1,3 +1,13 @@
-import { Dashboard } from './dashboard'
+import React from 'react'
 
-export default Dashboard
+import dynamic from 'next/dynamic'
+
+const Dashboard = dynamic(async () => (await import('./dashboard')).Dashboard, {
+  ssr: false,
+})
+
+const Page = () => {
+  return <Dashboard />
+}
+
+export default Page
