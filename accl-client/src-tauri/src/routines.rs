@@ -21,6 +21,21 @@ pub struct Routine {
     points: Vec<RoutinePoint>,
 }
 
+impl Routine {
+    pub fn empty() -> Routine {
+        Routine {
+            name: "EMPTY_ROUTINE".to_owned(),
+            curve_type: RoutineCurveType::Linear,
+            loops: false,
+            points: vec![],
+        }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.name == "EMPTY_ROUTINE".to_owned()
+    }
+}
+
 #[tauri::command]
 pub fn save_routine(routine: Routine) {
     println!("{:?}", routine)
