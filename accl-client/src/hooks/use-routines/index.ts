@@ -1,5 +1,4 @@
 import { invoke } from '@tauri-apps/api'
-import { emit } from '@tauri-apps/api/event'
 
 export type RoutineInterpolation = 'linear' | 'stepAfter' | 'monotone'
 
@@ -19,8 +18,7 @@ export const useRoutines = () => {
   })
 
   const upload = (routine: Routine) => {
-    console.log(routine)
-    emit('upload', formatForRust(routine))
+    invoke('upload_routine', { routine: formatForRust(routine) })
   }
 
   const save = (routine: Routine) => {

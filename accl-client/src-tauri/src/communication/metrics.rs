@@ -9,6 +9,7 @@ pub struct RawDataBundle {
     tg: f64, // target current
     c: f64,  // actual current
     f: i8,   // fan percentage
+    r_l: i8, // selected routine - loop
 }
 
 impl TryFrom<&str> for RawDataBundle {
@@ -52,6 +53,7 @@ pub fn handle_new_measurement<R: tauri::Runtime>(manager: &impl Manager<R>, str_
             return ();
         }
     };
+    println!("Selected routine info: \nloop: {}", raw.r_l);
     let data = DataBundle::from(raw);
     emit_new_metrics_event(manager, data);
 }

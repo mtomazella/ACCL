@@ -1,28 +1,28 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum RoutineCurveType {
     Linear,
     Monotone,
     StepAfter,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RoutinePoint {
     time: f32,
     current: f32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Routine {
-    name: String,
-    curve_type: RoutineCurveType,
-    loops: bool,
-    points: Vec<RoutinePoint>,
+    pub name: String,
+    pub curve_type: RoutineCurveType,
+    pub loops: bool,
+    pub points: Vec<RoutinePoint>,
 }
 
 impl Routine {
-    pub fn empty() -> Routine {
+    pub fn new() -> Routine {
         Routine {
             name: "EMPTY_ROUTINE".to_owned(),
             curve_type: RoutineCurveType::Linear,

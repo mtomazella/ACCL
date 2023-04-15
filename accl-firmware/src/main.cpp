@@ -1,5 +1,12 @@
 #include <Arduino.h>
 
+#include "Routine.cpp"
+#include "serialInput.h"
+// #include "serialOutput.cpp"
+
+Routine *routine = new Routine();
+char *buffer = "";
+
 void setup()
 {
   Serial.begin(9600);
@@ -7,7 +14,7 @@ void setup()
 
 void loop()
 {
-  Serial.print("{\"t\":12.2,\"tp\":36.8,\"tg\":2,\"c\":1.98,\"f\":30}");
-  Serial.flush();
-  delay(100);
+  handleSerialInput(&buffer);
+  // emitMetrics();
+  delay(1000);
 }
