@@ -1,12 +1,18 @@
+#include "debugConfig.h"
+
 #include <Arduino.h>
 
 #include "Routine.h"
 #include "serialInput.h"
-// #include "serialOutput.cpp"
+
+#ifndef DEBUG_DISABLE_METRICS
+#include "serialOutput.h"
+#endif
 
 Routine *routine = new Routine();
 char *buffer = (char *)malloc(sizeof(char) * 100);
 
+#ifdef DEBUG_SHOW_RAM
 int freeRam()
 {
   extern int __heap_start, *__brkval;
@@ -19,6 +25,7 @@ void display_freeram()
   Serial.print(F("- SRAM left: "));
   Serial.println(freeRam());
 }
+#endif
 
 void setup()
 {
@@ -30,10 +37,15 @@ void loop()
 {
   delay(2000);
 
+#ifdef DEBUG_SHOW_RAM
   Serial.println();
   display_freeram();
   Serial.println();
+#endif
 
   handleSerialInput(&buffer, routine);
-  // emitMetrics();
+
+#ifndef DEBUG_DISABLE_METRICS
+  emitMetrics();
+#endif
 }

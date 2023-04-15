@@ -1,3 +1,5 @@
+#include "debugConfig.h"
+
 #include <Arduino.h>
 #include <string.h>
 #include "Routine.h"

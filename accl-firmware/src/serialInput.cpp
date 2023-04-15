@@ -38,7 +38,11 @@ void extractData(char *buffer, Routine *result)
   char *colonPtr = strstr(buffer, ",");
   if (colonPtr == NULL && buffer[length - 1] != '}' && !(buffer[length - 1] == '"' && strstr(buffer, ":") != NULL))
   {
+
+#ifdef DEBUG_PRINT_ROUTINE
     Serial.println("Waiting for new data to complete buffer");
+#endif
+
     return;
   }
 
@@ -73,19 +77,25 @@ void handleSerialInput(char **buffer, Routine *routine)
 {
   char *input = readSerial();
 
+#ifdef DEBUG_PRINT_ROUTINE
   Serial.print("Input: ");
   Serial.println(input);
+#endif
 
   if (input != NULL)
     strcat(*buffer, input);
 
+#ifdef DEBUG_PRINT_ROUTINE
   Serial.print("Buffer: ");
   Serial.println(*buffer);
+#endif
 
   extractData(*buffer, routine);
 
+#ifdef DEBUG_PRINT_ROUTINE
   Serial.println(" ");
   routine->print();
+#endif
 
   free(input);
 }
