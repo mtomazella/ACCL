@@ -1,5 +1,5 @@
 #include <Arduino.h>
 #include <string.h>
-#include "Routine.cpp"
+#include "Routine.h"
 
-void handleSerialInput(char **buffer);
+void handleSerialInput(char **buffer, Routine *routine);

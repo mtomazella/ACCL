@@ -1,28 +1,12 @@
-#pragma once
-#include <Arduino.h>
+#include "Routine.h"
 
-enum class CurveType
+CurveType stringToCurveType(char *str)
 {
-  Linear,
-  StepUp,
-  Monotone
-};
-
-class Routine
-{
-public:
-  char name[30] = "NO_NAME";
-  int loop = 0;
-  CurveType curveType = CurveType::Linear;
-
-  Routine()
-  {
-  }
-};
-
-enum RoutineField
-{
-  NAME,
-  CURVE_TYPE,
-  NOT_A_FIELD
-};
+  if (strcmp(str, "Linear") == 0)
+    return CurveType::Linear;
+  if (strcmp(str, "StepAfter") == 0)
+    return CurveType::StepAfter;
+  if (strcmp(str, "Monotone") == 0)
+    return CurveType::Monotone;
+  return CurveType::NOT_A_CURVE_TYPE;
+}
