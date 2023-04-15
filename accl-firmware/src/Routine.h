@@ -24,6 +24,8 @@ public:
   char name[30] = "NO_NAME";
   CurveType curveType = CurveType::Linear;
   int loop = 0;
+
+  void print();
 };
 
 CurveType stringToCurveType(char *str);
