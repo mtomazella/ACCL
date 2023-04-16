@@ -9,8 +9,8 @@
 #include "serialOutput.h"
 #endif
 
-Routine *routine = new Routine();
-char *buffer = (char *)malloc(sizeof(char) * 100);
+static Routine *routine = new Routine();
+static char *buffer = (char *)malloc(sizeof(char) * SERIAL_INPUT_BUFFER_SIZE);
 
 #ifdef DEBUG_SHOW_RAM
 int freeRam()

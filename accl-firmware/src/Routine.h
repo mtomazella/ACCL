@@ -20,14 +20,26 @@ enum RoutineField
   NOT_A_FIELD
 };
 
+struct routinePoint
+{
+  int time;
+  float current;
+};
+typedef struct routinePoint RoutinePoint;
+
 class Routine
 {
+private:
+  int num_points = 0;
+
 public:
   char name[30] = "NO_NAME";
   CurveType curveType = CurveType::Linear;
   int loop = 0;
+  RoutinePoint points[MAX_NUM_POINTS_FOR_ROUTINE];
 
   void print();
+  void addPoint(RoutinePoint point);
 };
 
 CurveType stringToCurveType(char *str);

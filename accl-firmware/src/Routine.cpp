@@ -21,4 +21,24 @@ void Routine::print()
   Serial.print("Loops: ");
   Serial.println(this->loop);
   Serial.print("Points:\n");
+  for (int i = 0; i < this->num_points; i++)
+  {
+    Serial.print("- t: ");
+    Serial.print(this->points[i].time);
+    Serial.print(" c: ");
+    Serial.println(this->points[i].current);
+  }
+}
+
+void Routine::addPoint(RoutinePoint point)
+{
+  this->points[this->num_points++] = point;
+
+#ifdef DEBUG_PRINT_POINT_ADDED
+  Serial.println("Point added:");
+  Serial.print("t: ");
+  Serial.print(this->points[this->num_points - 1].time);
+  Serial.print(" c: ");
+  Serial.println(this->points[this->num_points - 1].current);
+#endif
 }
