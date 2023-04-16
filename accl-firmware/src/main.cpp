@@ -35,8 +35,6 @@ void setup()
 
 void loop()
 {
-  delay(2000);
-
 #ifdef DEBUG_SHOW_RAM
   Serial.println();
   display_freeram();

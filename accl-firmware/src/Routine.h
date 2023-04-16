@@ -22,7 +22,7 @@ enum RoutineField
 
 struct routinePoint
 {
-  int time;
+  float time;
   float current;
 };
 typedef struct routinePoint RoutinePoint;
@@ -40,6 +40,7 @@ public:
 
   void print();
   void addPoint(RoutinePoint point);
+  void clearPoints();
 };
 
 CurveType stringToCurveType(char *str);

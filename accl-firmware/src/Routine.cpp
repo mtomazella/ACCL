@@ -42,3 +42,8 @@ void Routine::addPoint(RoutinePoint point)
   Serial.println(this->points[this->num_points - 1].current);
 #endif
 }
+
+void Routine::clearPoints()
+{
+  this->num_points = 0;
+}
