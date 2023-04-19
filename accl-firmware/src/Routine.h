@@ -29,14 +29,12 @@ typedef struct routinePoint RoutinePoint;
 
 class Routine
 {
-private:
-  int num_points = 0;
-
 public:
   char name[30] = "NO_NAME";
   CurveType curveType = CurveType::Linear;
   int loop = 0;
   RoutinePoint points[MAX_NUM_POINTS_FOR_ROUTINE];
+  int num_points = 0;
 
   void print();
   void addPoint(RoutinePoint point);

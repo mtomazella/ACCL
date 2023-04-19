@@ -1,7 +1,39 @@
 #include "serialOutput.h"
 
-void emitMetrics()
+void emitMetrics(Routine *routine)
 {
-  Serial.print("{\"t\":12.2,\"tp\":36.8,\"tg\":2,\"c\":1.98,\"f\":30,\"r_l\":1}");
+  char message[100];
+
+  float tension = 12.2;
+  float temperature = 36.8;
+  float targetCurrent = 2.0;
+  float current = 1.98;
+  int fanPercentage = 30;
+
+#ifdef DEBUG_VERBOSE_METRICS
+  sprintf(
+      message,
+      "{\"t\":%.2f,\"tp\":%.2f,\"tg\":%.2f,\"c\":%.2f,\"f\":%.2d,\"r_l\":%.2d,\"r_n\":%s,\"r_c\":%d,\"r_p\":%d}",
+      tension,
+      temperature,
+      targetCurrent,
+      current,
+      fanPercentage,
+      routine->loop,
+      routine->name,
+      routine->curveType,
+      routine->num_points);
+#else
+  sprintf(
+      message,
+      "{\"t\":%.2f,\"tp\":%.2f,\"tg\":%.2f,\"c\":%.2f,\"f\":%.2d}",
+      tension,
+      temperature,
+      targetCurrent,
+      current,
+      fanPercentage);
+#endif
+
+  Serial.print(message);
   Serial.flush();
 }

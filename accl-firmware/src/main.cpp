@@ -50,6 +50,6 @@ void loop()
   handleSerialInput(&buffer, routine);
 
 #ifndef DEBUG_DISABLE_METRICS
-  emitMetrics();
+  emitMetrics(routine);
 #endif
 }

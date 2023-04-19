@@ -1,14 +1,12 @@
 #include "serialInput.h"
 
-static int readIndex = 0;
-
 char *readSerial()
 {
+  if (Serial.available() == 0)
+    return NULL;
+
   static char inputBuffer[65];
   String input = Serial.readString();
-
-  if (input.length() == 0)
-    return NULL;
 
   inputBuffer[0] = '\0';
   strcpy(inputBuffer, input.c_str());
