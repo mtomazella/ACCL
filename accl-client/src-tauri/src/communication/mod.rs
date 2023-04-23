@@ -44,11 +44,20 @@ pub async fn serial_process<R: tauri::Runtime>(manager: &impl Manager<R>) {
     loop {
         let upload_buffer_mutex: State<UploadBufferMutex> = manager.state();
         let mut upload_buffer = upload_buffer_mutex.0.lock().await;
-        if upload_buffer.upload_pending() {
-            println!("uploading");
+
+        if upload_buffer.read_confirmation_timeout() {
+            println!("Upload TIMED OUT");
+            upload_buffer.mark_upload_complete();
+        }
+
+        if upload_buffer.upload_pending() && !upload_buffer.waiting_for_read_confirmation() {
             let upload_complete = handle_routine_upload(&mut open_port, &upload_buffer);
             if upload_complete {
-                upload_buffer.last_upload_finished = Instant::now();
+                println!("Upload COMPLETE");
+                upload_buffer.mark_upload_complete();
+            } else {
+                upload_buffer.next_chunk_to_send += 1;
+                upload_buffer.last_read_confirmation_request = Instant::now();
             }
             continue;
         }
@@ -58,12 +67,17 @@ pub async fn serial_process<R: tauri::Runtime>(manager: &impl Manager<R>) {
                 let parsed_result = std::str::from_utf8(&serial_buf[..t]);
                 match parsed_result {
                     Ok(string_data) => {
-                        println!("{}\n", string_data);
-                        // str_buffer = define_new_str_buffer(str_buffer, string_data);
-                        // if str_buffer.starts_with('{') && str_buffer.ends_with('}') {
-                        //     handle_new_measurement(manager, &str_buffer);
-                        //     str_buffer = "".to_owned();
-                        // }
+                        if string_data == "READ_COMPLETE" {
+                            println!("Received READ CONFIRMATION");
+                            upload_buffer.last_read_confirmation_received = Instant::now();
+                            continue;
+                        }
+
+                        str_buffer = define_new_str_buffer(str_buffer, string_data);
+                        if str_buffer.starts_with('{') && str_buffer.ends_with('}') {
+                            handle_new_measurement(manager, &str_buffer);
+                            str_buffer = "".to_owned();
+                        }
                     }
                     Err(_) => println!("Invalid data received"),
                 };

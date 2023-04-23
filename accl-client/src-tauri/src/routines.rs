@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -7,10 +9,20 @@ pub enum RoutineCurveType {
     StepAfter,
 }
 
+impl RoutineCurveType {
+    pub fn to_string(&self) -> String {
+        match self {
+            RoutineCurveType::Linear => String::from_str("Linear").unwrap(),
+            RoutineCurveType::Monotone => String::from_str("Monotone").unwrap(),
+            RoutineCurveType::StepAfter => String::from_str("StepAfter").unwrap(),
+        }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RoutinePoint {
-    time: f32,
-    current: f32,
+    pub time: f32,
+    pub current: f32,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
