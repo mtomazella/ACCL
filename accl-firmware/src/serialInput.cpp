@@ -114,8 +114,12 @@ void handleSerialInput(char **buffer, Routine *routine)
   Serial.println(input);
 #endif
 
+  byte waiting_for_read_confirmation = 0;
   if (input != NULL)
+  {
     strcat(*buffer, input);
+    waiting_for_read_confirmation = 1;
+  }
 
 #ifdef DEBUG_PRINT_ROUTINE
   Serial.print("Buffer: ");
@@ -123,6 +127,12 @@ void handleSerialInput(char **buffer, Routine *routine)
 #endif
 
   extractData(*buffer, routine);
+
+  if (waiting_for_read_confirmation)
+  {
+    Serial.print("READ_COMPLETE");
+    waiting_for_read_confirmation = 0;
+  }
 
 #ifdef DEBUG_PRINT_ROUTINE
   Serial.println(" ");

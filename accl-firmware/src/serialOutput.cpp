@@ -13,15 +13,15 @@ void emitMetrics(Routine *routine)
 #ifdef DEBUG_VERBOSE_METRICS
   sprintf(
       message,
-      "{\"t\":%.2f,\"tp\":%.2f,\"tg\":%.2f,\"c\":%.2f,\"f\":%.2d,\"r_l\":%.2d,\"r_n\":%s,\"r_c\":%d,\"r_p\":%d}",
+      "{\"t\":%.2f,\"tp\":%.2f,\"tg\":%.2f,\"c\":%.2f,\"f\":%.2d,\"r_n\":%s,\"r_c\":%d,\"r_l\":%d,\"r_p\":%d}",
       tension,
       temperature,
       targetCurrent,
       current,
       fanPercentage,
-      routine->loop,
       routine->name,
       routine->curveType,
+      routine->loop,
       routine->num_points);
 #else
   sprintf(

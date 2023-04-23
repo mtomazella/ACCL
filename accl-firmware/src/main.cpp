@@ -33,6 +33,8 @@ void setup()
   buffer[0] = '\0';
 }
 
+unsigned long last_metrics_time = 0;
+
 void loop()
 {
 #ifdef DEBUG_LOOP_DELAY
@@ -40,6 +42,8 @@ void loop()
   delay(DEBUG_LOOP_DELAY);
 #endif
 #endif
+
+  unsigned long time = millis();
 
 #ifdef DEBUG_SHOW_RAM
   Serial.println();
@@ -50,6 +54,10 @@ void loop()
   handleSerialInput(&buffer, routine);
 
 #ifndef DEBUG_DISABLE_METRICS
-  emitMetrics(routine);
+  if (time - last_metrics_time >= METRICS_INTERVAL)
+  {
+    last_metrics_time = time;
+    emitMetrics(routine);
+  }
 #endif
 }
