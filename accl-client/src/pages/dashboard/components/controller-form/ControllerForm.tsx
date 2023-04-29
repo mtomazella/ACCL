@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
+import { Panel, PanelResizeHandle } from 'react-resizable-panels'
 
 import { faAdd, faRemove } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -146,15 +147,18 @@ export const ControllerForm: React.FC<{
   }
 
   return (
-    <StyledControllerForm>
-      <section className="plot">
+    <StyledControllerForm direction="vertical">
+      <Panel className="plot">
         <Chart
           data={controlPoints ?? []}
           interpolation={interpolation}
           loop={loop}
         />
-      </section>
-      <section className="form">
+      </Panel>
+
+      <PanelResizeHandle className="resize" />
+
+      <Panel className="form">
         <TableContainer component={Paper}>
           <Table aria-label="Points">
             <TableHead>
@@ -287,7 +291,7 @@ export const ControllerForm: React.FC<{
             </TableBody>
           </Table>
         </TableContainer>
-      </section>
+      </Panel>
     </StyledControllerForm>
   )
 }

@@ -1,11 +1,13 @@
+import { PanelGroup } from 'react-resizable-panels'
+
 import styled from 'styled-components'
 
-export const StyledControllerForm = styled.section`
+export const StyledControllerForm = styled(PanelGroup)`
   width: 100%;
   height: 100%;
-  padding: 1rem;
+  padding: 1rem 0 1rem 1rem;
 
-  > section.plot {
+  > .plot {
     height: 50%;
     width: 100%;
     border: 1px #e0e0e0 solid;
@@ -14,7 +16,18 @@ export const StyledControllerForm = styled.section`
       0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
   }
 
-  > section.form {
+  > .resize {
+    height: 5px;
+    background-color: lightgray;
+    opacity: 0;
+
+    transition-duration: 0.5s;
+  }
+  > .resize:hover {
+    opacity: 1;
+  }
+
+  > .form {
     > div.MuiTableContainer-root {
       border-top: none;
       border-radius: 0 0 4px 4px;

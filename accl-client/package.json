@@ -23,6 +23,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.1",
     "react-no-ssr": "^1.1.0",
+    "react-resizable-panels": "^0.0.42",
     "recharts": "^2.4.3"
   },
   "devDependencies": {

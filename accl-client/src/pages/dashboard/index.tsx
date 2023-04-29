@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
 import { Page } from 'src/blocks'
 import { Routine, useMetrics, useRoutines } from 'src/hooks'
@@ -13,16 +14,17 @@ const StyledDashboard = styled(Page)`
   flex-direction: row;
   width: 100vw;
 
-  > section {
-    height: 100%;
+  > div {
+    > .resize {
+      width: 5px;
+      background-color: lightgray;
+      opacity: 0;
+      margin: 0 0.5rem;
 
-    &.left {
-      flex: 1;
+      transition-duration: 0.5s;
     }
-
-    &.right {
-      width: fit-content;
-      min-width: 10rem;
+    > .resize:hover {
+      opacity: 1;
     }
   }
 `
@@ -48,18 +50,23 @@ export const Dashboard = () => {
 
   return (
     <StyledDashboard>
-      <section className="left">
-        <ControllerForm data={routine} exportData={setRoutine} />
-      </section>
-      <section className="right">
-        <SideBar
-          metrics={measurementsData}
-          buttonHandlers={{
-            upload: { onClick: onUpload },
-            save: { onClick: onSave },
-          }}
-        />
-      </section>
+      <PanelGroup direction="horizontal">
+        <Panel>
+          <ControllerForm data={routine} exportData={setRoutine} />
+        </Panel>
+
+        <PanelResizeHandle className="resize" />
+
+        <Panel defaultSize={20}>
+          <SideBar
+            metrics={measurementsData}
+            buttonHandlers={{
+              upload: { onClick: onUpload },
+              save: { onClick: onSave },
+            }}
+          />
+        </Panel>
+      </PanelGroup>
     </StyledDashboard>
   )
 }

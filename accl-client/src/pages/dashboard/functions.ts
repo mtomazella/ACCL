@@ -6,6 +6,7 @@ import {
   faFan,
   faPlug,
   faTemperature3,
+  faWaveSquare,
 } from '@fortawesome/free-solid-svg-icons'
 import { MetricsField, MetricsFieldData } from 'src/hooks'
 
@@ -28,6 +29,9 @@ export const formatMeasurements = currentMetrics => {
     },
     fan_percentage: {
       icon: faFan,
+    },
+    duty_cycle: {
+      icon: faWaveSquare,
     },
   }
   const result = {}

@@ -9,6 +9,7 @@ export type MetricsField =
   | 'target_current'
   | 'fan_percentage'
   | 'power'
+  | 'duty_cycle'
 
 export type MetricsFieldData = {
   key: MetricsField
@@ -63,6 +64,12 @@ const formatRawMetrics = (rawMetrics: RawMetrics | undefined): Metrics => {
         !rawMetrics.actual_current || !rawMetrics.tension
           ? '?'
           : (rawMetrics.actual_current * rawMetrics.tension).toString(),
+    },
+    duty_cycle: {
+      key: 'duty_cycle',
+      label: 'Duty Cycle',
+      unit: '',
+      value: (rawMetrics.duty_cycle ?? '?').toString(),
     },
   }
 }

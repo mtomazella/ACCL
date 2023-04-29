@@ -2,29 +2,34 @@ import { Card } from '@mui/material'
 import styled from 'styled-components'
 
 export const StyledSideBar = styled.div`
-  display: grid;
-  grid-column: 1f;
-  grid-row-gap: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
   padding: 1rem 1rem 1rem 0;
   width: 100%;
 `
 
 export const StyledPanel = styled(Card)`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-row-gap: 1rem;
+  display: flex;
+  flex-direction: row;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around;
   font-family: monospace;
   color: gray;
   border: 1px solid #e0e0e0;
   font-size: 1.5rem;
   padding: 0.8rem;
+  width: 100%;
 
   > .MuiIconButton-root {
     color: white;
     aspect-ratio: 1;
     width: fit-content;
     padding: 0.5rem;
+    margin: 0.5rem;
     align-self: center;
     justify-self: center;
 
@@ -52,7 +57,9 @@ export const StyledMeasurementPanel = styled(Card)`
   color: gray;
   border: 1px solid #e0e0e0;
   font-size: 1.5rem;
-  padding: 1rem 3rem;
+  padding: 1rem;
+  min-width: calc(50% - 0.5rem / 2);
+  flex-grow: 1;
 
   > h3 {
     font-size: 1.2rem;

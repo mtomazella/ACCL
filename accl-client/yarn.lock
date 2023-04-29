@@ -2394,6 +2394,11 @@ react-no-ssr@^1.1.0:
   dependencies:
     babel-runtime "6.x.x"
 
+react-resizable-panels@^0.0.42:
+  version "0.0.42"
+  resolved "https://registry.yarnpkg.com/react-resizable-panels/-/react-resizable-panels-0.0.42.tgz#e1a5d7fde7be4d18f32d0e021a0b4edb28b9edfe"
+  integrity sha512-nOaN9DeUTsmKjN3MFGaLd35kngGyO29SHRLdBRafYR1SV2F/LbWbpVUKVPwL2fBBTnQe2/rqOQwT4k+3cKeK+w==
+
 react-resize-detector@^7.1.2:
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-7.1.2.tgz#8ef975dd8c3d56f9a5160ac382ef7136dcd2d86c"
