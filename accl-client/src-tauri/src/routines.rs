@@ -47,8 +47,3 @@ impl Routine {
         self.name == "EMPTY_ROUTINE".to_owned()
     }
 }
-
-#[tauri::command]
-pub fn save_routine(routine: Routine) {
-    println!("{:?}", routine)
-}
