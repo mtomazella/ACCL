@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
 import { Page } from 'src/blocks'
-import { Routine, useMetrics, useRoutines } from 'src/hooks'
+import { Routine, useConfig, useMetrics, useRoutines } from 'src/hooks'
 import styled from 'styled-components'
 
 import { ControllerForm } from './components/controller-form'
@@ -32,6 +32,7 @@ const StyledDashboard = styled(Page)`
 export const Dashboard = () => {
   const { currentMetrics } = useMetrics()
   const { upload, save } = useRoutines()
+  const { fetch } = useConfig()
 
   const [routine, setRoutine] = useState<Routine | undefined>(undefined)
 
