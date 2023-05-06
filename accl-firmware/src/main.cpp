@@ -1,9 +1,12 @@
-#include "debugConfig.h"
+#include "config.h"
 
 #include <Arduino.h>
 
 #include "Routine.h"
 #include "serialInput.h"
+#include "display.h"
+#include "displayData.h"
+#include "load.h"
 
 #ifndef DEBUG_DISABLE_METRICS
 #include "serialOutput.h"
@@ -11,6 +14,15 @@
 
 static Routine *routine = new Routine();
 static char *buffer = (char *)malloc(sizeof(char) * SERIAL_INPUT_BUFFER_SIZE);
+
+LiquidCrystal display(DISPLAY_PIN_RS,
+                      DISPLAY_PIN_EN,
+                      DISPLAY_PIN_D4,
+                      DISPLAY_PIN_D5,
+                      DISPLAY_PIN_D6,
+                      DISPLAY_PIN_D7);
+
+DisplayData displayData;
 
 #ifdef DEBUG_SHOW_RAM
 int freeRam()
@@ -29,11 +41,14 @@ void display_freeram()
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(SERIAL_BAUD_RATE);
   buffer[0] = '\0';
+
+  displaySetup(&display);
 }
 
-unsigned long last_metrics_time = 0;
+unsigned long last_serial_out_time = 0;
+unsigned long last_display_time = 0;
 
 void loop()
 {
@@ -42,22 +57,29 @@ void loop()
   delay(DEBUG_LOOP_DELAY);
 #endif
 #endif
-
-  unsigned long time = millis();
-
 #ifdef DEBUG_SHOW_RAM
   Serial.println();
   display_freeram();
   Serial.println();
 #endif
 
-  handleSerialInput(&buffer, routine);
+  unsigned long time = millis();
+
+  loadProcess(&displayData);
+
+  serialInputProcess(&buffer, routine);
+
+  if (time - last_display_time >= DISPLAY_INTERVAL)
+  {
+    last_display_time = time;
+    displayProcess(&display, &displayData);
+  }
 
 #ifndef DEBUG_DISABLE_METRICS
-  if (time - last_metrics_time >= METRICS_INTERVAL)
+  if (time - last_serial_out_time >= SERIAL_OUTPUT_INTERVAL)
   {
-    last_metrics_time = time;
-    emitMetrics(routine);
+    last_serial_out_time = time;
+    serialOutputProcess(routine);
   }
 #endif
 }

@@ -1,7 +1,7 @@
-#include "debugConfig.h"
+#include "config.h"
 
 #include <Arduino.h>
 #include <string.h>
 #include "Routine.h"
 
-void handleSerialInput(char **buffer, Routine *routine);
+void serialInputProcess(char **buffer, Routine *routine);

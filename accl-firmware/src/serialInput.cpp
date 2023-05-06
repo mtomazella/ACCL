@@ -105,7 +105,7 @@ void extractData(char *buffer, Routine *result)
   return extractData(buffer, result);
 }
 
-void handleSerialInput(char **buffer, Routine *routine)
+void serialInputProcess(char **buffer, Routine *routine)
 {
   char *input = readSerial();
 

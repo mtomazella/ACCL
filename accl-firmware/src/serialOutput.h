@@ -2,4 +2,4 @@
 #include "Routine.h"
 #include "printf.h"
 
-void emitMetrics(Routine *routine);
+void serialOutputProcess(Routine *routine);

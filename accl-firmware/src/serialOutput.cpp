@@ -1,6 +1,6 @@
 #include "serialOutput.h"
 
-void emitMetrics(Routine *routine)
+void serialOutputProcess(Routine *routine)
 {
   char message[100];
 
