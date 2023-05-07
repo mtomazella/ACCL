@@ -9,12 +9,14 @@ void drawInterface(LCD *display)
   display->print("Amps: ");
 }
 
-void displaySetup(LCD *display)
+void displaySetup(LCD *display, SensorData *sensorData)
 {
   display->init();
   display->setBacklight(true);
   display->begin(16, 2);
+
   // drawInterface(display);
+  updateData(display, sensorData);
 }
 
 void updateData(LCD *display, SensorData *sensorData)

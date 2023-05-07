@@ -52,7 +52,7 @@ void setup()
   sensorData.current = 0;
   sensorData.tension = 0;
 
-  displaySetup(&display);
+  displaySetup(&display, &sensorData);
 }
 
 unsigned long last_serial_out_time = 0;
