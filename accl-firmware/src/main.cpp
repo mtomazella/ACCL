@@ -1,12 +1,13 @@
 #include "config.h"
 
 #include <Arduino.h>
+#include "Wire.h"
 
 #include "Routine.h"
 #include "serialInput.h"
 #include "display.h"
-#include "displayData.h"
-#include "load.h"
+#include "sensorData.h"
+#include "sensor.h"
 
 #ifndef DEBUG_DISABLE_METRICS
 #include "serialOutput.h"
@@ -14,15 +15,18 @@
 
 static Routine *routine = new Routine();
 static char *buffer = (char *)malloc(sizeof(char) * SERIAL_INPUT_BUFFER_SIZE);
+SensorData sensorData;
 
+#ifdef I2C_DISPLAY
+LCD display(DISPLAY_I2C_ADDRESS, DISPLAY_COLS, DISPLAY_ROWS);
+#else
 LiquidCrystal display(DISPLAY_PIN_RS,
                       DISPLAY_PIN_EN,
                       DISPLAY_PIN_D4,
                       DISPLAY_PIN_D5,
                       DISPLAY_PIN_D6,
                       DISPLAY_PIN_D7);
-
-DisplayData displayData;
+#endif
 
 #ifdef DEBUG_SHOW_RAM
 int freeRam()
@@ -41,8 +45,12 @@ void display_freeram()
 
 void setup()
 {
+  Wire.begin();
   Serial.begin(SERIAL_BAUD_RATE);
   buffer[0] = '\0';
+
+  sensorData.current = 0;
+  sensorData.tension = 0;
 
   displaySetup(&display);
 }
@@ -65,14 +73,14 @@ void loop()
 
   unsigned long time = millis();
 
-  loadProcess(&displayData);
+  sensorProcess(&sensorData);
 
   serialInputProcess(&buffer, routine);
 
   if (time - last_display_time >= DISPLAY_INTERVAL)
   {
     last_display_time = time;
-    displayProcess(&display, &displayData);
+    displayProcess(&display, &sensorData);
   }
 
 #ifndef DEBUG_DISABLE_METRICS
