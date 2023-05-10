@@ -105,7 +105,7 @@ void extractData(char *buffer, Routine *result)
   return extractData(buffer, result);
 }
 
-void serialInputProcess(char **buffer, Routine *routine)
+void serialInputProcess(char **buffer, Routine *routine, SystemData *systemData)
 {
   char *input = readSerial();
 
@@ -131,7 +131,9 @@ void serialInputProcess(char **buffer, Routine *routine)
   if (waiting_for_read_confirmation)
   {
     Serial.print("READ_COMPLETE");
+    Serial.flush();
     waiting_for_read_confirmation = 0;
+    systemData->routine_start_time = millis();
   }
 
 #ifdef DEBUG_PRINT_ROUTINE

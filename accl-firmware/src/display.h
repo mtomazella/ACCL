@@ -1,5 +1,6 @@
+#include <Arduino.h>
 #include "config.h"
-#include "sensorData.h"
+#include "systemData.h"
 #include "printf.h"
 
 #ifdef I2C_DISPLAY
@@ -10,8 +11,8 @@
 #define LCD LiquidCrystal
 #endif
 
-void displaySetup(LCD *display, SensorData *sensorData);
-void displayProcess(LCD *display, SensorData *sensorData);
+void displaySetup(LCD *display, SystemData *systemData);
+void displayProcess(LCD *display, SystemData *systemData);
 void drawInterface(LCD *display);
-void updateData(LCD *display, SensorData *sensorData);
-int replaceDifferentSensorData(SensorData *newData, SensorData *storedData);
+void updateData(LCD *display, SystemData *systemData);
+int replaceDifferentSystemData(SystemData *newData, SystemData *storedData);

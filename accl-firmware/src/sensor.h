@@ -1,5 +1,5 @@
 #include "Arduino.h"
 #include "config.h"
-#include "sensorData.h"
+#include "systemData.h"
 
-void sensorProcess(SensorData *sensorData);
+void sensorProcess(SystemData *systemData);

@@ -1,13 +1,14 @@
 #include "config.h"
 
 #include <Arduino.h>
-#include "Wire.h"
+#include <Wire.h>
 
 #include "Routine.h"
 #include "serialInput.h"
 #include "display.h"
-#include "sensorData.h"
+#include "systemData.h"
 #include "sensor.h"
+#include "loadControl.h"
 
 #ifndef DEBUG_DISABLE_METRICS
 #include "serialOutput.h"
@@ -15,7 +16,7 @@
 
 static Routine *routine = new Routine();
 static char *buffer = (char *)malloc(sizeof(char) * SERIAL_INPUT_BUFFER_SIZE);
-SensorData sensorData;
+SystemData systemData;
 
 #ifdef I2C_DISPLAY
 LCD display(DISPLAY_I2C_ADDRESS, DISPLAY_COLS, DISPLAY_ROWS);
@@ -49,10 +50,10 @@ void setup()
   Serial.begin(SERIAL_BAUD_RATE);
   buffer[0] = '\0';
 
-  sensorData.current = 0;
-  sensorData.tension = 0;
+  systemData.current = 0;
+  systemData.tension = 0;
 
-  displaySetup(&display, &sensorData);
+  displaySetup(&display, &systemData);
 }
 
 unsigned long last_serial_out_time = 0;
@@ -73,21 +74,23 @@ void loop()
 
   unsigned long time = millis();
 
-  sensorProcess(&sensorData);
+  sensorProcess(&systemData);
 
-  serialInputProcess(&buffer, routine);
+  loadControlProcess(routine, &systemData);
 
   if (time - last_display_time >= DISPLAY_INTERVAL)
   {
     last_display_time = time;
-    displayProcess(&display, &sensorData);
+    displayProcess(&display, &systemData);
   }
+
+  serialInputProcess(&buffer, routine, &systemData);
 
 #ifndef DEBUG_DISABLE_METRICS
   if (time - last_serial_out_time >= SERIAL_OUTPUT_INTERVAL)
   {
     last_serial_out_time = time;
-    serialOutputProcess(routine);
+    serialOutputProcess(routine, &systemData);
   }
 #endif
 }

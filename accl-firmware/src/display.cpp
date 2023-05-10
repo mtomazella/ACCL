@@ -9,32 +9,42 @@ void drawInterface(LCD *display)
   display->print("Amps: ");
 }
 
-void displaySetup(LCD *display, SensorData *sensorData)
+void displaySetup(LCD *display, SystemData *systemData)
 {
   display->init();
   display->setBacklight(true);
   display->begin(16, 2);
 
   // drawInterface(display);
-  updateData(display, sensorData);
+  updateData(display, systemData);
 }
 
-void updateData(LCD *display, SensorData *sensorData)
+void updateData(LCD *display, SystemData *systemData)
 {
   short int tensionInterfaceLength = 0;
   display->setCursor(tensionInterfaceLength, 0);
-  char tensionText[DISPLAY_COLS - tensionInterfaceLength + 1];
-  snprintf(tensionText, DISPLAY_COLS - tensionInterfaceLength, "%.2fV       ", sensorData->tension);
+  char tensionText[9];
+  snprintf(tensionText, 8, "%.2fV    ", systemData->tension);
   display->print(tensionText);
 
   short int currentInterfaceLength = 0;
-  display->setCursor(currentInterfaceLength, 1);
-  char currentText[DISPLAY_COLS - currentInterfaceLength + 1];
-  snprintf(currentText, DISPLAY_COLS - currentInterfaceLength, "%.2fA       ", sensorData->current);
+  display->setCursor(8, 0);
+  char currentText[9];
+  snprintf(currentText, 8, "%.2fA    ", systemData->current);
   display->print(currentText);
+
+  display->setCursor(0,1);
+  char timeText[9];
+  snprintf(timeText, 8, "%d         ", (millis() - systemData->routine_start_time) / 1000);
+  display->print(timeText);
+
+  display->setCursor(8, 1);
+  char targetText[9];
+  snprintf(targetText, 8, "%.2fA     ", systemData->targetCurrent);
+  display->print(targetText);
 }
 
-int replaceDifferentSensorData(SensorData *newData, SensorData *storedData)
+int replaceDifferentSystemData(SystemData *newData, SystemData *storedData)
 {
   int changed = 0;
   if (storedData->current != newData->current)
@@ -50,10 +60,10 @@ int replaceDifferentSensorData(SensorData *newData, SensorData *storedData)
   return changed;
 }
 
-void displayProcess(LCD *display, SensorData *sensorData)
+void displayProcess(LCD *display, SystemData *systemData)
 {
-  static SensorData oldSensorData;
-  if (replaceDifferentSensorData(sensorData, &oldSensorData) == 0)
+  static SystemData oldSystemData;
+  if (replaceDifferentSystemData(systemData, &oldSystemData) == 0)
     return;
-  updateData(display, sensorData);
+  updateData(display, systemData);
 }

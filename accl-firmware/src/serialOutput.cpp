@@ -1,14 +1,14 @@
 #include "serialOutput.h"
 
-void serialOutputProcess(Routine *routine)
+void serialOutputProcess(Routine *routine, SystemData *systemData)
 {
   char message[100];
 
-  float tension = 12.2;
-  float temperature = 36.8;
-  float targetCurrent = 2.0;
-  float current = 1.98;
-  int fanPercentage = 30;
+  float tension = systemData->tension;
+  float temperature = systemData->temperature;
+  float targetCurrent = systemData->targetCurrent;
+  float current = systemData->current;
+  int fanPercentage = systemData->fanPercentage;
 
 #ifdef DEBUG_VERBOSE_METRICS
   sprintf(
@@ -26,7 +26,7 @@ void serialOutputProcess(Routine *routine)
 #else
   sprintf(
       message,
-      "{\"t\":%.2f,\"tp\":%.2f,\"tg\":%.2f,\"c\":%.2f,\"f\":%.2d}",
+      "{\"t\":%.2f,\"tp\":%.2f,\"tg\":%.2f,\"c\":%.2f,\"f\":%d}",
       tension,
       temperature,
       targetCurrent,

@@ -10,8 +10,8 @@ float readTension()
   return (float)analogRead(TENSION_PIN) * 30 / 1024;
 }
 
-void sensorProcess(SensorData *sensorData)
+void sensorProcess(SystemData *systemData)
 {
-  sensorData->current = readCurrent();
-  sensorData->tension = readTension();
+  systemData->current = readCurrent();
+  systemData->tension = readTension();
 }
