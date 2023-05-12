@@ -11,9 +11,9 @@ void drawInterface(LCD *display)
 
 void displaySetup(LCD *display, SystemData *systemData)
 {
-  display->init();
-  display->setBacklight(true);
-  display->begin(16, 2);
+  // display->init();
+  // display->setBacklight(true);
+  display->begin(DISPLAY_COLS, DISPLAY_ROWS);
 
   // drawInterface(display);
   updateData(display, systemData);
@@ -21,21 +21,19 @@ void displaySetup(LCD *display, SystemData *systemData)
 
 void updateData(LCD *display, SystemData *systemData)
 {
-  short int tensionInterfaceLength = 0;
-  display->setCursor(tensionInterfaceLength, 0);
+  display->setCursor(0, 0);
   char tensionText[9];
   snprintf(tensionText, 8, "%.2fV    ", systemData->tension);
   display->print(tensionText);
 
-  short int currentInterfaceLength = 0;
   display->setCursor(8, 0);
   char currentText[9];
   snprintf(currentText, 8, "%.2fA    ", systemData->current);
   display->print(currentText);
 
-  display->setCursor(0,1);
+  display->setCursor(0, 1);
   char timeText[9];
-  snprintf(timeText, 8, "%d         ", (millis() - systemData->routine_start_time) / 1000);
+  snprintf(timeText, 8, "%d         ", systemData->routineTime_ms / 1000);
   display->print(timeText);
 
   display->setCursor(8, 1);

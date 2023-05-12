@@ -2,9 +2,7 @@
 
 void loadControlProcess(Routine *routine, SystemData *systemData)
 {
-  systemData->targetCurrent = getTargetCurrent(
-      routine,
-      (millis() - systemData->routine_start_time) / 1000); // Time in seconds
+  systemData->targetCurrent = getTargetCurrent(routine, systemData->routineTime_ms / 1000);
 }
 
 float getTargetCurrent(Routine *routine, unsigned long time)
@@ -34,7 +32,8 @@ float getTargetCurrentForLinear(Routine *routine, unsigned long time)
       float a = routine->points[i + 1].current;
       float t0 = routine->points[i].time;
       float t = routine->points[i + 1].time;
-      if (t == t0) return a0;
+      if (t == t0)
+        return a0;
       return (a - a0) / (t - t0) * (time - t0) + a0;
     }
 

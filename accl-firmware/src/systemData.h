@@ -2,7 +2,6 @@
 
 struct SystemData
 {
-  unsigned long routine_start_time = 0;
   // Sensor
   float tension = 0.0;
   float current = 0.0;
@@ -10,4 +9,6 @@ struct SystemData
   // Control
   float targetCurrent = 0.0;
   int fanPercentage = 0;
+  unsigned long routineStartTime_ms = 0;
+  unsigned long routineTime_ms = 0;
 };

@@ -133,7 +133,7 @@ void serialInputProcess(char **buffer, Routine *routine, SystemData *systemData)
     Serial.print("READ_COMPLETE");
     Serial.flush();
     waiting_for_read_confirmation = 0;
-    systemData->routine_start_time = millis();
+    systemData->routineStartTime_ms = millis();
   }
 
 #ifdef DEBUG_PRINT_ROUTINE

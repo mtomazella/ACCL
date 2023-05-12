@@ -61,6 +61,18 @@ unsigned long last_display_time = 0;
 
 void loop()
 {
+  float routineMaxTime_s = routine->points[routine->num_points - 1].time;
+  unsigned long time_ms = millis();
+  if (routine->loop == 1)
+  {
+    unsigned long routineMaxTime_ms = (unsigned long)routineMaxTime_s * (unsigned long)1000;
+    unsigned long routineCycle = time_ms / routineMaxTime_ms;
+    time_ms = time_ms - systemData.routineStartTime_ms - (routineCycle * routineMaxTime_ms);
+  }
+  else
+    time_ms = time_ms - systemData.routineStartTime_ms;
+  systemData.routineTime_ms = time_ms;
+
 #ifdef DEBUG_LOOP_DELAY
 #if DEBUG_LOOP_DELAY != 0
   delay(DEBUG_LOOP_DELAY);

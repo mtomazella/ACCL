@@ -8,19 +8,19 @@
 #define TENSION_PIN A1
 // Display
 #define DISPLAY_INTERVAL 500
-#define I2C_DISPLAY
+// #define I2C_DISPLAY
 #ifdef I2C_DISPLAY
 #define DISPLAY_I2C_ADDRESS 0x27
 #else
-#define DISPLAY_PIN_RS 7
-#define DISPLAY_PIN_EN 8
-#define DISPLAY_PIN_D4 9
-#define DISPLAY_PIN_D5 10
-#define DISPLAY_PIN_D6 11
-#define DISPLAY_PIN_D7 12
+#define DISPLAY_PIN_RS 12
+#define DISPLAY_PIN_EN 11
+#define DISPLAY_PIN_D4 10
+#define DISPLAY_PIN_D5 9
+#define DISPLAY_PIN_D6 8
+#define DISPLAY_PIN_D7 7
 #endif
-#define DISPLAY_COLS 16
-#define DISPLAY_ROWS 2
+#define DISPLAY_COLS 20
+#define DISPLAY_ROWS 4
 
 // Debug
 // #define DEBUG_LOOP_DELAY 5000
