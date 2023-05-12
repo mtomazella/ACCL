@@ -2,6 +2,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import {
   faBattery,
   faBolt,
+  faClock,
   faCrosshairs,
   faFan,
   faPlug,
@@ -29,6 +30,9 @@ export const formatMeasurements = currentMetrics => {
     },
     fan_percentage: {
       icon: faFan,
+    },
+    routine_time: {
+      icon: faClock,
     },
     duty_cycle: {
       icon: faWaveSquare,

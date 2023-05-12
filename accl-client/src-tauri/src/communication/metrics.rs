@@ -4,11 +4,12 @@ use tauri::Manager;
 
 #[derive(Clone, Copy, Deserialize)]
 pub struct RawDataBundle {
-    tp: f64, // temperature
-    t: f64,  // tension
-    tg: f64, // target current
-    c: f64,  // actual current
-    f: i8,   // fan percentage
+    tp: f64,  // temperature
+    t: f64,   // tension
+    tg: f64,  // target current
+    c: f64,   // actual current
+    f: i8,    // fan percentage
+    clk: u32, // time in milliseconds
 }
 
 impl TryFrom<&str> for RawDataBundle {
@@ -28,6 +29,7 @@ pub struct DataBundle {
     actual_current: f64,
     fan_percentage: i8,
     power: f64,
+    routine_time: u32,
 }
 
 impl From<RawDataBundle> for DataBundle {
@@ -39,6 +41,7 @@ impl From<RawDataBundle> for DataBundle {
             temperature: raw.tp,
             tension: raw.t,
             power: raw.t * raw.c,
+            routine_time: raw.clk,
         }
     }
 }

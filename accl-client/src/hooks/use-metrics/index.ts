@@ -9,6 +9,7 @@ export type MetricsField =
   | 'target_current'
   | 'fan_percentage'
   | 'power'
+  | 'routine_time'
   | 'duty_cycle'
 
 export type MetricsFieldData = {
@@ -63,7 +64,17 @@ const formatRawMetrics = (rawMetrics: RawMetrics | undefined): Metrics => {
       value:
         !rawMetrics.actual_current || !rawMetrics.tension
           ? '?'
-          : (rawMetrics.actual_current * rawMetrics.tension).toString(),
+          : (rawMetrics.actual_current * rawMetrics.tension)
+              .toFixed(3)
+              .toString(),
+    },
+    routine_time: {
+      key: 'routine_time',
+      label: 'Tempo',
+      unit: 's',
+      value: rawMetrics.routine_time
+        ? (rawMetrics.routine_time / 1000).toFixed(1).toString()
+        : '?',
     },
     duty_cycle: {
       key: 'duty_cycle',
