@@ -1,5 +1,6 @@
-#include "Arduino.h"
+#include <Arduino.h>
+#include <DallasTemperature.h>
 #include "config.h"
 #include "systemData.h"
 
-void sensorProcess(SystemData *systemData);
+void sensorProcess(SystemData *systemData, DallasTemperature *temperatureSensor);

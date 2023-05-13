@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 #include "Routine.h"
 #include "serialInput.h"
@@ -28,6 +30,9 @@ LiquidCrystal display(DISPLAY_PIN_RS,
                       DISPLAY_PIN_D6,
                       DISPLAY_PIN_D7);
 #endif
+
+OneWire oneWire(ONEWIRE_PIN);
+DallasTemperature temperatureSensor(&oneWire);
 
 #ifdef DEBUG_SHOW_RAM
 int freeRam()
@@ -86,7 +91,7 @@ void loop()
 
   unsigned long time = millis();
 
-  sensorProcess(&systemData);
+  sensorProcess(&systemData, &temperatureSensor);
 
   loadControlProcess(routine, &systemData);
 

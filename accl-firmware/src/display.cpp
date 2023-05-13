@@ -1,45 +1,34 @@
 #include "display.h"
 
-void drawInterface(LCD *display)
-{
-  display->clear();
-  display->home();
-  display->print("Volts: ");
-  display->setCursor(0, 1);
-  display->print("Amps: ");
-}
-
 void displaySetup(LCD *display, SystemData *systemData)
 {
-  // display->init();
-  // display->setBacklight(true);
+#ifdef I2C_DISPLAY
+  display->init();
+  display->setBacklight(true);
+#endif
   display->begin(DISPLAY_COLS, DISPLAY_ROWS);
+  display->clear();
 
-  // drawInterface(display);
-  updateData(display, systemData);
+  displayProcess(display, systemData);
 }
 
-void updateData(LCD *display, SystemData *systemData)
+void dataTab(LCD *display, SystemData *systemData)
 {
+  char lineBuffer[DISPLAY_COLS + 1];
+
+  snprintf(lineBuffer, DISPLAY_COLS + 1, "%.2fV %.1f'C %d%%    ", systemData->tension, systemData->temperature, systemData->fanPercentage);
   display->setCursor(0, 0);
-  char tensionText[9];
-  snprintf(tensionText, 8, "%.2fV    ", systemData->tension);
-  display->print(tensionText);
+  display->print(lineBuffer);
 
-  display->setCursor(8, 0);
-  char currentText[9];
-  snprintf(currentText, 8, "%.2fA    ", systemData->current);
-  display->print(currentText);
-
+  snprintf(lineBuffer, DISPLAY_COLS + 1, "%.2fA %.2fA          ", systemData->current, systemData->targetCurrent);
   display->setCursor(0, 1);
-  char timeText[9];
-  snprintf(timeText, 8, "%d         ", systemData->routineTime_ms / 1000);
-  display->print(timeText);
+  display->print(lineBuffer);
 
-  display->setCursor(8, 1);
-  char targetText[9];
-  snprintf(targetText, 8, "%.2fA     ", systemData->targetCurrent);
-  display->print(targetText);
+#ifdef DEBUG_DISPLAY_DEBUG_INFO
+  snprintf(lineBuffer, DISPLAY_COLS + 1, "%ds                  ", systemData->routineStartTime_ms / 1000);
+  display->setCursor(0, 2);
+  display->print(lineBuffer);
+#endif
 }
 
 int replaceDifferentSystemData(SystemData *newData, SystemData *storedData)
@@ -55,13 +44,31 @@ int replaceDifferentSystemData(SystemData *newData, SystemData *storedData)
     storedData->tension = newData->tension;
     changed = 1;
   }
+  if (storedData->fanPercentage != newData->fanPercentage)
+  {
+    storedData->fanPercentage = newData->fanPercentage;
+    changed = 1;
+  }
+  if (storedData->targetCurrent != newData->targetCurrent)
+  {
+    storedData->targetCurrent = newData->targetCurrent;
+    changed = 1;
+  }
+  if (storedData->temperature != newData->temperature)
+  {
+    storedData->temperature = newData->temperature;
+    changed = 1;
+  }
   return changed;
 }
 
 void displayProcess(LCD *display, SystemData *systemData)
 {
+#ifndef DEBUG_UPDATE_DISPLAY_EVERY_FRAME
   static SystemData oldSystemData;
   if (replaceDifferentSystemData(systemData, &oldSystemData) == 0)
     return;
-  updateData(display, systemData);
+#endif
+
+  dataTab(display, systemData);
 }

@@ -13,6 +13,4 @@
 
 void displaySetup(LCD *display, SystemData *systemData);
 void displayProcess(LCD *display, SystemData *systemData);
-void drawInterface(LCD *display);
-void updateData(LCD *display, SystemData *systemData);
 int replaceDifferentSystemData(SystemData *newData, SystemData *storedData);

@@ -11,4 +11,8 @@ struct SystemData
   int fanPercentage = 0;
   unsigned long routineStartTime_ms = 0;
   unsigned long routineTime_ms = 0;
+  short int manualControlEnabled = 1;
+  // Menu
+  unsigned short int selectedTab = 0;
+  unsigned short int selectedItem = 0;
 };

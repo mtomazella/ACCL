@@ -10,8 +10,15 @@ float readTension()
   return (float)analogRead(TENSION_PIN) * 30 / 1024;
 }
 
-void sensorProcess(SystemData *systemData)
+float readTemperature(DallasTemperature *temperatureSensor)
+{
+  temperatureSensor->requestTemperatures();
+  return temperatureSensor->getTempCByIndex(0);
+}
+
+void sensorProcess(SystemData *systemData, DallasTemperature *temperatureSensor)
 {
   systemData->current = readCurrent();
   systemData->tension = readTension();
+  systemData->temperature = readTemperature(temperatureSensor);
 }

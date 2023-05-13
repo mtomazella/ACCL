@@ -1,0 +1,15 @@
+{"name":"test name","curve_type":"Monotone","loops":"true","po
+ints":[{"time":"0.0","current":"0.0"},{"time":"10.0","current"
+:"3.0"}]}
+
+{"name":"rotina foda","curve_type":"Linear","loops":"false","p
+oints":[{"time":"3.0","current":"8.0"},{"time":"9.0","current":
+"983.0"}]}
+
+{"name":"test name","curve_type":"StepAfter","loops"
+:"true","points":[{"time":"0.0","current":"0.0"},{"t
+ime":"10.0","current":"3.0"}]}
+
+{"name":"NO_NAME","curve_type":"StepAfter","loops"
+:"false","points":[{"time":"0","current":"0"},{"ti
+me":"20","current":"10"}]}

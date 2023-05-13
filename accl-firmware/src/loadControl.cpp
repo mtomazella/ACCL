@@ -2,7 +2,8 @@
 
 void loadControlProcess(Routine *routine, SystemData *systemData)
 {
-  systemData->targetCurrent = getTargetCurrent(routine, systemData->routineTime_ms / 1000);
+  if (systemData->manualControlEnabled == 0)
+    systemData->targetCurrent = getTargetCurrent(routine, systemData->routineTime_ms / 1000);
 }
 
 float getTargetCurrent(Routine *routine, unsigned long time)
