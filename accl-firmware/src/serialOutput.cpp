@@ -14,7 +14,7 @@ void serialOutputProcess(Routine *routine, SystemData *systemData)
 #ifdef DEBUG_VERBOSE_METRICS
   sprintf(
       message,
-      "{\"t\":%.2f,\"tp\":%.2f,\"tg\":%.2f,\"c\":%.2f,\"f\":%d,\"clk\":%d,\"r_n\":%s,\"r_c\":%d,\"r_l\":%d,\"r_p\":%d}",
+      "{\"t\":%.2f,\"tp\":%.2f,\"tg\":%.2f,\"c\":%.2f,\"f\":%d,\"clk\":%lu,\"r_n\":%s,\"r_c\":%d,\"r_l\":%d,\"r_p\":%d}",
       tension,
       temperature,
       targetCurrent,
@@ -28,7 +28,7 @@ void serialOutputProcess(Routine *routine, SystemData *systemData)
 #else
   sprintf(
       message,
-      "{\"t\":%.2f,\"tp\":%.2f,\"tg\":%.2f,\"c\":%.2f,\"f\":%d,\"clk\":%d}",
+      "{\"t\":%.2f,\"tp\":%.2f,\"tg\":%.2f,\"c\":%.2f,\"f\":%d,\"clk\":%lu}",
       tension,
       temperature,
       targetCurrent,
@@ -38,5 +38,4 @@ void serialOutputProcess(Routine *routine, SystemData *systemData)
 #endif
 
   Serial.print(message);
-  Serial.flush();
 }

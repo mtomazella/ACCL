@@ -114,7 +114,7 @@ void serialInputProcess(char **buffer, Routine *routine, SystemData *systemData)
   Serial.println(input);
 #endif
 
-  byte waiting_for_read_confirmation = 0;
+  static byte waiting_for_read_confirmation = 0;
   if (input != NULL)
   {
     strcat(*buffer, input);
@@ -128,10 +128,9 @@ void serialInputProcess(char **buffer, Routine *routine, SystemData *systemData)
 
   extractData(*buffer, routine);
 
-  if (waiting_for_read_confirmation)
+  if (waiting_for_read_confirmation && Serial.availableForWrite() > 12)
   {
     Serial.print("READ_COMPLETE");
-    Serial.flush();
     waiting_for_read_confirmation = 0;
     systemData->routineStartTime_ms = millis();
   }

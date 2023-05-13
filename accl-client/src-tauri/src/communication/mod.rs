@@ -67,7 +67,7 @@ pub async fn serial_process<R: tauri::Runtime>(manager: &impl Manager<R>) {
                 let parsed_result = std::str::from_utf8(&serial_buf[..t]);
                 match parsed_result {
                     Ok(string_data) => {
-                        if string_data == "READ_COMPLETE" {
+                        if string_data.contains("READ_COMPLETE") {
                             println!("Received READ CONFIRMATION");
                             upload_buffer.last_read_confirmation_received = Instant::now();
                             continue;
