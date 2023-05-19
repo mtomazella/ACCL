@@ -4,6 +4,7 @@
 #include <Wire.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <RotaryEncoder.h>
 
 #include "Routine.h"
 #include "serialInput.h"
@@ -11,6 +12,7 @@
 #include "systemData.h"
 #include "sensor.h"
 #include "loadControl.h"
+#include "menuInput.h"
 
 #ifndef DEBUG_DISABLE_METRICS
 #include "serialOutput.h"
@@ -33,6 +35,7 @@ LiquidCrystal display(DISPLAY_PIN_RS,
 
 OneWire oneWire(ONEWIRE_PIN);
 DallasTemperature temperatureSensor(&oneWire);
+RotaryEncoder encoder(ENCODER_DT_PIN, ENCODER_CLK_PIN, RotaryEncoder::LatchMode::TWO03);
 
 #ifdef DEBUG_SHOW_RAM
 int freeRam()
@@ -58,7 +61,9 @@ void setup()
   systemData.current = 0;
   systemData.tension = 0;
 
+  sensorSetup(&temperatureSensor);
   displaySetup(&display, &systemData);
+  menuInputSetup();
 }
 
 unsigned long last_serial_out_time = 0;
@@ -92,6 +97,8 @@ void loop()
   unsigned long time = millis();
 
   sensorProcess(&systemData, &temperatureSensor);
+
+  menuInputProcess(&systemData, &encoder);
 
   loadControlProcess(routine, &systemData);
 

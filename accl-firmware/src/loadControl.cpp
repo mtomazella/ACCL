@@ -4,6 +4,8 @@ void loadControlProcess(Routine *routine, SystemData *systemData)
 {
   if (systemData->manualControlEnabled == 0)
     systemData->targetCurrent = getTargetCurrent(routine, systemData->routineTime_ms / 1000);
+  else
+    systemData->targetCurrent = ((float)DAC_MAX_VCC * (float)systemData->dacValue) / (CURRENT_RESISTOR_RESISTANCE * (float)(DAC_MAX_VALUE + 1));
 }
 
 float getTargetCurrent(Routine *routine, unsigned long time)
