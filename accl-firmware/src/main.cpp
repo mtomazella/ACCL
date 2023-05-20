@@ -5,6 +5,7 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <RotaryEncoder.h>
+#include <Adafruit_MCP4725.h>
 
 #include "Routine.h"
 #include "serialInput.h"
@@ -13,6 +14,7 @@
 #include "sensor.h"
 #include "loadControl.h"
 #include "menuInput.h"
+#include "fan.h"
 
 #ifndef DEBUG_DISABLE_METRICS
 #include "serialOutput.h"
@@ -21,6 +23,10 @@
 static Routine *routine = new Routine();
 static char *buffer = (char *)malloc(sizeof(char) * SERIAL_INPUT_BUFFER_SIZE);
 SystemData systemData;
+OneWire oneWire(ONEWIRE_PIN);
+DallasTemperature temperatureSensor(&oneWire);
+RotaryEncoder encoder(ENCODER_DT_PIN, ENCODER_CLK_PIN, RotaryEncoder::LatchMode::TWO03);
+Adafruit_MCP4725 dac;
 
 #ifdef I2C_DISPLAY
 LCD display(DISPLAY_I2C_ADDRESS, DISPLAY_COLS, DISPLAY_ROWS);
@@ -32,10 +38,6 @@ LiquidCrystal display(DISPLAY_PIN_RS,
                       DISPLAY_PIN_D6,
                       DISPLAY_PIN_D7);
 #endif
-
-OneWire oneWire(ONEWIRE_PIN);
-DallasTemperature temperatureSensor(&oneWire);
-RotaryEncoder encoder(ENCODER_DT_PIN, ENCODER_CLK_PIN, RotaryEncoder::LatchMode::TWO03);
 
 #ifdef DEBUG_SHOW_RAM
 int freeRam()
@@ -57,6 +59,7 @@ void setup()
   Wire.begin();
   Serial.begin(SERIAL_BAUD_RATE);
   buffer[0] = '\0';
+  dac.begin(DAC_ADDRESS);
 
   systemData.current = 0;
   systemData.tension = 0;
@@ -64,10 +67,12 @@ void setup()
   sensorSetup(&temperatureSensor);
   displaySetup(&display, &systemData);
   menuInputSetup();
+  fanSetup();
 }
 
 unsigned long last_serial_out_time = 0;
 unsigned long last_display_time = 0;
+unsigned long last_fan_time = 0;
 
 void loop()
 {
@@ -100,7 +105,7 @@ void loop()
 
   menuInputProcess(&systemData, &encoder);
 
-  loadControlProcess(routine, &systemData);
+  loadControlProcess(routine, &systemData, &dac);
 
   if (time - last_display_time >= DISPLAY_INTERVAL)
   {
@@ -117,4 +122,10 @@ void loop()
     serialOutputProcess(routine, &systemData);
   }
 #endif
+
+  if (time - last_fan_time >= FAN_UPDATE_INTERVAL)
+  {
+    last_fan_time = time;
+    fanProcess(&systemData);
+  }
 }

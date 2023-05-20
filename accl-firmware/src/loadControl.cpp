@@ -1,11 +1,18 @@
 #include "loadControl.h"
 
-void loadControlProcess(Routine *routine, SystemData *systemData)
+void loadControlProcess(Routine *routine, SystemData *systemData, Adafruit_MCP4725 *dac)
 {
   if (systemData->manualControlEnabled == 0)
-    systemData->targetCurrent = getTargetCurrent(routine, systemData->routineTime_ms / 1000);
+  {
+    float targetCurrent = getTargetCurrent(routine, systemData->routineTime_ms / 1000);
+    systemData->targetCurrent = targetCurrent;
+    dac->setVoltage(targetCurrent * CURRENT_RESISTOR_RESISTANCE * (DAC_MAX_VALUE + 1) / DAC_MAX_VCC, false);
+  }
   else
+  {
     systemData->targetCurrent = ((float)DAC_MAX_VCC * (float)systemData->dacValue) / (CURRENT_RESISTOR_RESISTANCE * (float)(DAC_MAX_VALUE + 1));
+    dac->setVoltage(systemData->dacValue, false);
+  }
 }
 
 float getTargetCurrent(Routine *routine, unsigned long time)
