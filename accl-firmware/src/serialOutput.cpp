@@ -9,7 +9,7 @@ void serialOutputProcess(Routine *routine, SystemData *systemData)
   float targetCurrent = systemData->targetCurrent;
   float current = systemData->current;
   int fanPercentage = systemData->fanPercentage;
-  unsigned long time = systemData->routineTime_ms;
+  unsigned long time = systemData->manualControlEnabled ? 0 : systemData->routineTime_ms;
 
 #ifdef DEBUG_VERBOSE_METRICS
   sprintf(
@@ -28,7 +28,7 @@ void serialOutputProcess(Routine *routine, SystemData *systemData)
 #else
   sprintf(
       message,
-      "{\"t\":%.2f,\"tp\":%.2f,\"tg\":%.2f,\"c\":%.2f,\"f\":%d,\"clk\":%lu}",
+      "{\"t\":%.3f,\"tp\":%.1f,\"tg\":%.3f,\"c\":%.3f,\"f\":%d,\"clk\":%lu}",
       tension,
       temperature,
       targetCurrent,

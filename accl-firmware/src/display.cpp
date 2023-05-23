@@ -16,11 +16,11 @@ void dataTab(LCD *display, SystemData *systemData)
 {
   char lineBuffer[DISPLAY_COLS + 1];
 
-  snprintf(lineBuffer, DISPLAY_COLS + 1, "%.2fV %.1f'C %d%%    ", systemData->tension, systemData->temperature, systemData->fanPercentage);
+  snprintf(lineBuffer, DISPLAY_COLS + 1, "%.3fV %.1f'C %d%%    ", systemData->tension, systemData->temperature, systemData->fanPercentage);
   display->setCursor(0, 0);
   display->print(lineBuffer);
 
-  snprintf(lineBuffer, DISPLAY_COLS + 1, "%.2fA %.2fA          ", systemData->current, systemData->targetCurrent);
+  snprintf(lineBuffer, DISPLAY_COLS + 1, "%.3fA %.3fA          ", systemData->current, systemData->targetCurrent);
   display->setCursor(0, 1);
   display->print(lineBuffer);
 
@@ -29,6 +29,13 @@ void dataTab(LCD *display, SystemData *systemData)
   display->setCursor(0, 2);
   display->print(lineBuffer);
 #endif
+
+  if (systemData->manualControlEnabled)
+    snprintf(lineBuffer, DISPLAY_COLS + 1, "Manual             ");
+  else
+    snprintf(lineBuffer, DISPLAY_COLS + 1, "Rotina             ");
+  display->setCursor(0, 3);
+  display->print(lineBuffer);
 }
 
 int replaceDifferentSystemData(SystemData *newData, SystemData *storedData)

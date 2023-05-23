@@ -14,6 +14,7 @@ void fanProcess(SystemData *systemData)
       : percentage > 1
           ? 100
           : (int)(percentage * 100.0);
-
+#ifndef DEBUG_DISABLE_FAN
   analogWrite(FAN_PIN, (int)(percentage * 255.0));
+#endif
 }

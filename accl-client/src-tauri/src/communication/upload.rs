@@ -4,7 +4,6 @@ use std::{
     str::FromStr,
     time::{Duration, Instant},
 };
-use tauri::State;
 use tokio::sync::{Mutex, MutexGuard};
 
 use crate::routines::{Routine, RoutinePoint};
