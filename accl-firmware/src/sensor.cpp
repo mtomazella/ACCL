@@ -1,18 +1,19 @@
 #include "sensor.h"
 
-void sensorSetup(DallasTemperature *temperatureSensor)
+void sensorSetup(DallasTemperature *temperatureSensor, Adafruit_ADS1115 *adc)
 {
   temperatureSensor->begin();
+  adc->begin();
 }
 
-float readCurrent()
+float readCurrent(Adafruit_ADS1115 *adc)
 {
-  return (float)analogRead(CURRENT_PIN) * 2.5 / 1024 / 0.22;
+  return (float)adc->readADC_SingleEnded(ADC_CURRENT_CHANNEL) * 5 / 65535.0 / 0.22;
 }
 
-float readTension()
+float readTension(Adafruit_ADS1115 *adc)
 {
-  return (float)analogRead(TENSION_PIN) * 30 / 1024;
+  return (float)adc->readADC_SingleEnded(ADC_TENSION_CHANNEL) * 74.0 / 65535.0;
 }
 
 void updateTemperature(DallasTemperature *temperatureSensor, SystemData *systemData)
@@ -29,15 +30,15 @@ void updateTemperature(DallasTemperature *temperatureSensor, SystemData *systemD
   }
   else
   {
-    systemData->temperature = (float)temperatureSensor->getTempC(0);
+    systemData->temperature = (float)temperatureSensor->getTempCByIndex(0);
     temperatureRequested = 0;
   }
   lastExecution = millis();
 }
 
-void sensorProcess(SystemData *systemData, DallasTemperature *temperatureSensor)
+void sensorProcess(SystemData *systemData, DallasTemperature *temperatureSensor, Adafruit_ADS1115 *adc)
 {
-  systemData->current = readCurrent();
-  systemData->tension = readTension();
+  systemData->current = readCurrent(adc);
+  systemData->tension = readTension(adc);
   updateTemperature(temperatureSensor, systemData);
 }

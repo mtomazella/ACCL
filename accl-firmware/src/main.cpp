@@ -6,6 +6,7 @@
 #include <DallasTemperature.h>
 #include <RotaryEncoder.h>
 #include <Adafruit_MCP4725.h>
+#include <Adafruit_ADS1X15.h>
 
 #include "Routine.h"
 #include "serialInput.h"
@@ -27,6 +28,7 @@ OneWire oneWire(ONEWIRE_PIN);
 DallasTemperature temperatureSensor(&oneWire);
 RotaryEncoder encoder(ENCODER_DT_PIN, ENCODER_CLK_PIN, RotaryEncoder::LatchMode::TWO03);
 Adafruit_MCP4725 dac;
+Adafruit_ADS1115 adc;
 
 #ifdef I2C_DISPLAY
 LCD display(DISPLAY_I2C_ADDRESS, DISPLAY_COLS, DISPLAY_ROWS);
@@ -64,7 +66,7 @@ void setup()
   systemData.current = 0;
   systemData.tension = 0;
 
-  sensorSetup(&temperatureSensor);
+  sensorSetup(&temperatureSensor, &adc);
   displaySetup(&display, &systemData);
   menuInputSetup();
   fanSetup();
@@ -101,7 +103,7 @@ void loop()
 
   unsigned long time = millis();
 
-  sensorProcess(&systemData, &temperatureSensor);
+  sensorProcess(&systemData, &temperatureSensor, &adc);
 
   menuInputProcess(&systemData, &encoder);
 
