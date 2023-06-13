@@ -5,9 +5,10 @@
 #define SERIAL_OUTPUT_INTERVAL 500
 // Pins
 #define ONEWIRE_PIN 2
-#define ENCODER_SWITCH_PIN 11
+#define ENCODER_SWITCH_PIN 13
 #define ENCODER_DT_PIN 12
-#define ENCODER_CLK_PIN 13
+#define ENCODER_CLK_PIN 11
+#define RELAY_PIN 4
 // Display
 #define DISPLAY_INTERVAL 500
 // #define I2C_DISPLAY
