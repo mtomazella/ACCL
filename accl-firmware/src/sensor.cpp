@@ -8,12 +8,12 @@ void sensorSetup(DallasTemperature *temperatureSensor, Adafruit_ADS1115 *adc)
 
 float readCurrent(Adafruit_ADS1115 *adc)
 {
-  return (float)adc->readADC_SingleEnded(ADC_CURRENT_CHANNEL) * 5 / 65535.0 / 0.22;
+  return (float)adc->readADC_SingleEnded(ADC_CURRENT_CHANNEL) * 5 / 65536.0;
 }
 
 float readTension(Adafruit_ADS1115 *adc)
 {
-  return (float)adc->readADC_SingleEnded(ADC_TENSION_CHANNEL) * 74.0 / 65535.0;
+  return (float)adc->readADC_SingleEnded(ADC_TENSION_CHANNEL) * 74.0 / 65536.0;
 }
 
 void updateTemperature(DallasTemperature *temperatureSensor, SystemData *systemData)

@@ -1,5 +1,9 @@
 use serde::{Deserialize, Serialize};
-use std::str;
+use std::{
+    fs::{self, OpenOptions},
+    io::{Seek, Write},
+    str,
+};
 use tauri::Manager;
 
 #[derive(Clone, Copy, Deserialize)]
@@ -56,6 +60,21 @@ pub fn handle_new_measurement<R: tauri::Runtime>(manager: &impl Manager<R>, str_
         }
     };
     let data = DataBundle::from(raw);
+
+    // let mut file = OpenOptions::new()
+    //     .write(true)
+    //     .append(true)
+    //     .open("/home/tomazella/accl/temp.txt")
+    //     .unwrap();
+
+    // if let Err(e) = writeln!(
+    //     file,
+    //     "time: {}  tension: {}  target: {}  current: {}",
+    //     data.routine_time, data.tension, data.target_current, data.actual_current
+    // ) {
+    //     eprintln!("Couldn't write to file: {}", e);
+    // }
+
     emit_new_metrics_event(manager, data);
 }
 
