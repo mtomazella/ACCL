@@ -9,7 +9,7 @@ type UseConfigReturn = {
 
 export const useConfig = (): UseConfigReturn => {
   const fetch = async () => {
-    return invoke('get_config')
+    return invoke('get_config') as ClientConfigurations
   }
 
   const update = async () => {

@@ -4,7 +4,8 @@ use std::{
     path::PathBuf,
 };
 
-enum FileDatabaseError {
+#[allow(dead_code)]
+pub enum FileDatabaseError {
     FailedRead,
 }
 
@@ -22,7 +23,10 @@ pub trait FileDatabase {
         let path = self.get_path();
 
         if !path.exists() {
-            File::create(path);
+            match File::create(path) {
+                Err(_) => panic!("Failed to create file"),
+                _ => return,
+            }
         }
     }
 
@@ -32,7 +36,7 @@ pub trait FileDatabase {
 
         return match read_to_string(path) {
             Ok(value) => Ok(value),
-            Err(error) => Err(FileDatabaseError::FailedRead),
+            Err(_) => Err(FileDatabaseError::FailedRead),
         };
     }
 

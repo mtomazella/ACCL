@@ -37,7 +37,7 @@ type Form = {
 
 export const ControllerForm: React.FC<{
   exportData: (routine: Routine) => void
-  data: Routine
+  data: Routine | undefined
 }> = ({ data, exportData }) => {
   const {
     control,
@@ -72,7 +72,7 @@ export const ControllerForm: React.FC<{
 
   const interpolation: RoutineInterpolation = useMemo(
     () => getValues('curve_type'),
-    [curveTypeWatcher],
+    [curveTypeWatcher]
   )
 
   const loop = useMemo(() => getValues('loop') === 'Y', [loopWatcher])
@@ -109,8 +109,11 @@ export const ControllerForm: React.FC<{
     if (!time) {
       setError(
         'newTime',
-        { ...errorOptions.error, message: 'Defina o tempo em segundos' },
-        errorOptions.options,
+        {
+          ...errorOptions.error,
+          message: 'Defina o tempo em segundos',
+        },
+        errorOptions.options
       )
       return
     }
@@ -121,13 +124,13 @@ export const ControllerForm: React.FC<{
           ...errorOptions.error,
           message: 'Defina a corrente que a carga deve manter',
         },
-        errorOptions.options,
+        errorOptions.options
       )
       return
     }
 
     const indexOfExitingPoint = getValues('controlPoints').findIndex(
-      point => point.time.toString() === time.toString(),
+      point => point.time.toString() === time.toString()
     )
 
     if (indexOfExitingPoint !== -1)
@@ -142,13 +145,13 @@ export const ControllerForm: React.FC<{
     setFocus('newTime')
   }
 
-  const handleFieldKeyDown = ({ key }) => {
+  const handleFieldKeyDown = ({ key }: { key: string }) => {
     if (key === 'Enter') addNewControlPoint()
   }
 
   return (
     <StyledControllerForm direction="vertical">
-      <Panel className="plot">
+      <Panel className="plot" defaultSize={20}>
         <Chart
           data={controlPoints ?? []}
           interpolation={interpolation}

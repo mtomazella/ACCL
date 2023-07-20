@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
-import { Page } from 'src/blocks'
-import { Routine, useConfig, useMetrics, useRoutines } from 'src/hooks'
 import styled from 'styled-components'
 
+import { Page } from './../../blocks/page'
+import { Routine, useConfig, useMetrics, useRoutines } from './../../hooks'
 import { ControllerForm } from './components/controller-form'
 import { SideBar } from './components/side-bar/SideBar'
 import { formatMeasurements } from './functions'
@@ -12,7 +12,7 @@ import { formatMeasurements } from './functions'
 const StyledDashboard = styled(Page)`
   display: flex;
   flex-direction: row;
-  width: 100vw;
+  background-color: white;
 
   > div {
     > .resize {
@@ -31,23 +31,27 @@ const StyledDashboard = styled(Page)`
 
 export const Dashboard = () => {
   const { currentMetrics } = useMetrics()
-  const { upload, save } = useRoutines()
-  const { fetch } = useConfig()
+  const routineApi = useRoutines()
+  const configApi = useConfig()
 
   const [routine, setRoutine] = useState<Routine | undefined>(undefined)
 
   const measurementsData = useMemo(
     () => formatMeasurements(currentMetrics),
-    [currentMetrics],
+    [currentMetrics]
   )
 
   const onUpload = useCallback(() => {
-    upload(routine)
-  }, [routine, upload])
+    routineApi.upload(routine)
+  }, [routine, routineApi.upload])
 
   const onSave = useCallback(() => {
-    save(routine)
-  }, [routine, save])
+    routineApi.save(routine)
+  }, [routine, routineApi.save])
+
+  const onConfig = useCallback(() => {
+    configApi.fetch()
+  }, [configApi.fetch])
 
   return (
     <StyledDashboard>
@@ -64,6 +68,7 @@ export const Dashboard = () => {
             buttonHandlers={{
               upload: { onClick: onUpload },
               save: { onClick: onSave },
+              config: { onClick: onConfig },
             }}
           />
         </Panel>

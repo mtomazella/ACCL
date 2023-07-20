@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 export const StyledControllerForm = styled(PanelGroup)`
   width: 100%;
-  height: 100%;
   padding: 1rem 0 1rem 1rem;
 
   > .plot {

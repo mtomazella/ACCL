@@ -43,6 +43,7 @@ impl Routine {
         }
     }
 
+    #[allow(dead_code)]
     pub fn is_empty(&self) -> bool {
         self.name == "EMPTY_ROUTINE".to_owned()
     }
