@@ -9,10 +9,10 @@ import {
   faTemperature3,
   faWaveSquare,
 } from '@fortawesome/free-solid-svg-icons'
-import { MetricsField, MetricsFieldData } from 'src/hooks'
+import { Metrics, MetricsField, MetricsFieldData } from 'src/hooks'
 
-export const formatMeasurements = currentMetrics => {
-  const infoToAddAndOrder: Record<MetricsField, object> = {
+export const formatMeasurements = (currentMetrics: Metrics) => {
+  const infoToAddAndOrder: Record<MetricsField, { icon: any }> = {
     tension: {
       icon: faBolt,
     },
@@ -38,10 +38,15 @@ export const formatMeasurements = currentMetrics => {
       icon: faWaveSquare,
     },
   }
-  const result = {}
-  Object.keys(infoToAddAndOrder).forEach(field => {
-    if (!currentMetrics[field]) return
-    result[field] = { ...currentMetrics[field], ...infoToAddAndOrder[field] }
+  const result: Partial<
+    Record<MetricsField, MetricsFieldData & { icon: any }>
+  > = {}
+  Object.keys(infoToAddAndOrder).forEach((field: string) => {
+    if (!currentMetrics[field as MetricsField]) return
+    result[field as MetricsField] = {
+      ...currentMetrics[field as MetricsField],
+      ...infoToAddAndOrder[field as MetricsField],
+    }
   })
   return Object.values(result) as (MetricsFieldData & { icon: IconProp })[]
 }

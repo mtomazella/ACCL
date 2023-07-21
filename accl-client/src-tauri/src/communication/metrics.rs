@@ -1,9 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::{
-    fs::{self, OpenOptions},
-    io::{Seek, Write},
-    str,
-};
+use std::str;
 use tauri::Manager;
 
 #[derive(Clone, Copy, Deserialize)]

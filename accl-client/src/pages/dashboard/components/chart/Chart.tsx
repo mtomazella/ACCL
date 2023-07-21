@@ -19,7 +19,7 @@ export const Chart: React.FC<{
 }> = ({ data, interpolation, loop }) => {
   const maxCurrent = useMemo(
     () => data.reduce((max, e) => (e.current > max ? e.current : max), 0),
-    [data],
+    [data]
   )
 
   const formattedData = useMemo(() => {
@@ -31,12 +31,12 @@ export const Chart: React.FC<{
       !loop
         ? {
             time: Infinity,
-            current: data.at(-1).current ?? 0,
+            current: data.at(-1)?.current ?? 0,
           }
         : {
             time: Infinity,
-            current: data.at(0).current ?? 0,
-          },
+            current: data.at(0)?.current ?? 0,
+          }
     )
     return points
   }, [data, loop])
@@ -50,7 +50,7 @@ export const Chart: React.FC<{
             } segundos.`
           : `A corrente retorna para o valor definido em 0`
         : `Tempo: ${time}s`,
-    [loop],
+    [loop]
   )
 
   return (

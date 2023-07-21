@@ -38,7 +38,7 @@ export const Dashboard = () => {
 
   const measurementsData = useMemo(
     () => formatMeasurements(currentMetrics),
-    [currentMetrics],
+    [currentMetrics]
   )
 
   const onUpload = useCallback(() => {

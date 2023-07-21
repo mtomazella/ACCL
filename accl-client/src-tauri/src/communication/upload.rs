@@ -145,7 +145,10 @@ pub fn handle_routine_upload(
         "Writing: {}",
         from_utf8_lossy(chunks[upload_buffer.next_chunk_to_send])
     );
-    serial_port.write(chunks[upload_buffer.next_chunk_to_send]);
+    match serial_port.write(chunks[upload_buffer.next_chunk_to_send]) {
+        Err(_) => println!("Failed to write to serial"),
+        _ => ()
+    }
 
     if upload_buffer.next_chunk_to_send == chunks.len() - 1 {
         return true;

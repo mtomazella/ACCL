@@ -17,11 +17,13 @@ export const useRoutines = () => {
     points,
   })
 
-  const upload = (routine: Routine) => {
+  const upload = (routine: Routine | undefined) => {
+    if (!routine) return
     invoke('upload_routine', { routine: formatForRust(routine) })
   }
 
-  const save = (routine: Routine) => {
+  const save = (routine: Routine | undefined) => {
+    if (!routine) return
     if (
       !(
         typeof window !== 'undefined' &&
@@ -30,6 +32,7 @@ export const useRoutines = () => {
       )
     )
       return
+
     invoke('save_routine', {
       routine: formatForRust(routine),
     })
