@@ -151,7 +151,7 @@ export const ControllerForm: React.FC<{
 
   return (
     <StyledControllerForm direction="vertical">
-      <Panel className="plot">
+      <Panel className="plot" defaultSize={20}>
         <Chart
           data={controlPoints ?? []}
           interpolation={interpolation}

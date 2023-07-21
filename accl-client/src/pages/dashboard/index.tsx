@@ -12,7 +12,7 @@ import { formatMeasurements } from './functions'
 const StyledDashboard = styled(Page)`
   display: flex;
   flex-direction: row;
-  width: 100vw;
+  background-color: white;
 
   > div {
     > .resize {
