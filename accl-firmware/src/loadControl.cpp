@@ -9,6 +9,11 @@ void loadControlProcess(Routine *routine, SystemData *systemData, Adafruit_MCP47
 #ifndef DEBUG_DISABLE_LOAD
     dac->setVoltage(targetCurrent * CURRENT_RESISTOR_RESISTANCE * (DAC_MAX_VALUE + 1) / DAC_MAX_VCC, false);
 #endif
+
+    if (targetCurrent == 0)
+      digitalWrite(RELAY_PIN, LOW);
+    else
+      digitalWrite(RELAY_PIN, HIGH);
   }
   else
   {
@@ -16,6 +21,11 @@ void loadControlProcess(Routine *routine, SystemData *systemData, Adafruit_MCP47
 #ifndef DEBUG_DISABLE_LOAD
     dac->setVoltage(systemData->dacValue, false);
 #endif
+
+    if (systemData->dacValue == 0)
+      digitalWrite(RELAY_PIN, LOW);
+    else
+      digitalWrite(RELAY_PIN, HIGH);
   }
 }
 
